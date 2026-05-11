@@ -14,15 +14,10 @@
     --accent1: #6c63ff;
     --accent2: #ff6584;
     --accent3: #43e6b5;
-    --accent4: #ffd36e;
-    --accent5: #ff8c42;
-    --accent6: #5bc8f5;
     --text: #e8e8f0;
     --muted: #7a7a9a;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     background: var(--bg);
     color: var(--text);
@@ -30,8 +25,6 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
-
-  /* Background grid */
   body::before {
     content: '';
     position: fixed;
@@ -43,456 +36,272 @@
     pointer-events: none;
     z-index: 0;
   }
-
-  /* Glow orbs */
   .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.18;
-    pointer-events: none;
-    z-index: 0;
+    position: fixed; border-radius: 50%;
+    filter: blur(100px); opacity: 0.18;
+    pointer-events: none; z-index: 0;
     animation: floatOrb 12s ease-in-out infinite;
   }
-  .orb1 { width: 480px; height: 480px; background: var(--accent1); top: -120px; left: -100px; animation-delay: 0s; }
-  .orb2 { width: 320px; height: 320px; background: var(--accent2); bottom: -80px; right: -60px; animation-delay: -5s; }
-  .orb3 { width: 240px; height: 240px; background: var(--accent3); top: 40%; left: 55%; animation-delay: -9s; }
-
+  .orb1 { width:480px;height:480px;background:var(--accent1);top:-120px;left:-100px;animation-delay:0s; }
+  .orb2 { width:320px;height:320px;background:var(--accent2);bottom:-80px;right:-60px;animation-delay:-5s; }
+  .orb3 { width:240px;height:240px;background:var(--accent3);top:40%;left:55%;animation-delay:-9s; }
   @keyframes floatOrb {
-    0%, 100% { transform: translate(0, 0); }
-    33% { transform: translate(30px, -30px); }
-    66% { transform: translate(-20px, 20px); }
+    0%,100% { transform:translate(0,0); }
+    33% { transform:translate(30px,-30px); }
+    66% { transform:translate(-20px,20px); }
   }
-
   .container {
-    position: relative;
-    z-index: 1;
-    max-width: 960px;
-    margin: 0 auto;
+    position: relative; z-index: 1;
+    max-width: 960px; margin: 0 auto;
     padding: 60px 24px 100px;
   }
-
-  /* Header */
-  header {
-    text-align: center;
-    margin-bottom: 56px;
-    animation: fadeDown 0.7s ease both;
-  }
-
+  header { text-align:center; margin-bottom:56px; animation:fadeDown 0.7s ease both; }
   @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-24px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity:0; transform:translateY(-24px); }
+    to   { opacity:1; transform:translateY(0); }
   }
-
   .logo-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(108,99,255,0.15);
-    border: 1px solid rgba(108,99,255,0.35);
-    border-radius: 100px;
-    padding: 6px 18px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--accent1);
-    text-transform: uppercase;
-    margin-bottom: 20px;
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(108,99,255,0.15); border:1px solid rgba(108,99,255,0.35);
+    border-radius:100px; padding:6px 18px;
+    font-size:12px; font-weight:700; letter-spacing:2px;
+    color:var(--accent1); text-transform:uppercase; margin-bottom:20px;
   }
-
   .logo-badge .dot {
-    width: 7px; height: 7px;
-    background: var(--accent1);
-    border-radius: 50%;
-    animation: pulse 2s ease infinite;
+    width:7px;height:7px;background:var(--accent1);
+    border-radius:50%;animation:pulse 2s ease infinite;
   }
-
   @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.7); }
+    0%,100% { opacity:1;transform:scale(1); }
+    50%      { opacity:0.4;transform:scale(0.7); }
   }
-
   h1 {
-    font-family: 'Gmarket Sans', sans-serif;
-    font-size: clamp(32px, 5vw, 52px);
-    font-weight: 700;
-    background: linear-gradient(135deg, #fff 30%, var(--accent1));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.2;
-    margin-bottom: 14px;
+    font-family:'Gmarket Sans',sans-serif;
+    font-size:clamp(32px,5vw,52px); font-weight:700;
+    background:linear-gradient(135deg,#fff 30%,var(--accent1));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-clip:text; line-height:1.2; margin-bottom:14px;
   }
-
-  .subtitle {
-    color: var(--muted);
-    font-size: 15px;
-    letter-spacing: 0.3px;
-  }
-
-  /* Grid */
+  .subtitle { color:var(--muted); font-size:15px; }
   .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 18px;
-    margin-bottom: 40px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:18px; margin-bottom:40px;
   }
 
-  /* Cards */
+  /* ── Card ── */
   .card {
-    position: relative;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 28px 24px 24px;
-    cursor: pointer;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
-    animation: fadeUp 0.5s ease both;
-    overflow: hidden;
+    position:relative; background:var(--card);
+    border:1px solid var(--border); border-radius:18px;
+    padding:28px 24px 24px; cursor:pointer;
+    text-decoration:none; display:flex; flex-direction:column; gap:10px;
+    transition:transform 0.22s,background 0.22s,border-color 0.22s,box-shadow 0.22s;
+    animation:fadeUp 0.5s ease both; overflow:hidden;
   }
-
   .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--c, var(--accent1));
-    border-radius: 18px 18px 0 0;
-    opacity: 0.85;
+    content:''; position:absolute; top:0;left:0;right:0; height:3px;
+    background:var(--c,var(--accent1)); border-radius:18px 18px 0 0; opacity:0.85;
   }
-
-  .card:hover {
-    background: var(--card-hover);
-    border-color: rgba(255,255,255,0.13);
-    transform: translateY(-5px) scale(1.01);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06);
+  .card:not(.edit-active):hover {
+    background:var(--card-hover); border-color:rgba(255,255,255,0.13);
+    transform:translateY(-5px) scale(1.01);
+    box-shadow:0 20px 60px rgba(0,0,0,0.45),0 0 0 1px rgba(255,255,255,0.06);
   }
+  .card.edit-active { cursor:default; border-color:rgba(108,99,255,0.2); }
+  .card.edit-active:hover { border-color:rgba(108,99,255,0.45); background:var(--card-hover); }
 
-  .card-icon {
-    font-size: 30px;
-    line-height: 1;
-  }
-
-  .card-name {
-    font-family: 'Gmarket Sans', sans-serif;
-    font-size: 17px;
-    font-weight: 500;
-    color: #fff;
-  }
-
+  .card-icon { font-size:30px; line-height:1; }
+  .card-name { font-family:'Gmarket Sans',sans-serif; font-size:17px; font-weight:500; color:#fff; }
   .card-url {
-    font-size: 11px;
-    color: var(--muted);
-    word-break: break-all;
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    font-size:11px; color:var(--muted); word-break:break-all;
+    margin-top:auto; display:flex; align-items:center; gap:5px;
   }
-
-  .card-url svg {
-    flex-shrink: 0;
-    opacity: 0.5;
-  }
-
+  .card-url svg { flex-shrink:0; opacity:0.5; }
   .card-arrow {
-    position: absolute;
-    top: 24px; right: 20px;
-    font-size: 18px;
-    opacity: 0;
-    color: var(--muted);
-    transform: translateX(-6px);
-    transition: opacity 0.2s, transform 0.2s;
+    position:absolute; top:24px;right:20px; font-size:18px;
+    opacity:0; color:var(--muted);
+    transform:translateX(-6px); transition:opacity 0.2s,transform 0.2s;
   }
+  .card:not(.edit-active):hover .card-arrow { opacity:1; transform:translateX(0); }
 
-  .card:hover .card-arrow {
-    opacity: 1;
-    transform: translateX(0);
+  /* ── Edit mode button row (top-right) ── */
+  .card-btn-row {
+    position:absolute; top:8px;right:8px;
+    display:flex; gap:4px; z-index:6;
+    opacity:0; transition:opacity 0.2s;
   }
+  .card.edit-active:hover .card-btn-row { opacity:1; }
+  .card-btn {
+    border:none; border-radius:8px;
+    width:28px;height:28px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer; font-size:13px;
+    transition:background 0.2s,transform 0.15s;
+  }
+  .card-btn:hover { transform:scale(1.15); }
+  .card-btn-edit  { background:rgba(108,99,255,0.22); color:#a89fff; }
+  .card-btn-edit:hover  { background:rgba(108,99,255,0.45); }
+  .card-btn-delete{ background:rgba(255,100,100,0.18); color:#ff6b6b; }
+  .card-btn-delete:hover{ background:rgba(255,100,100,0.38); }
 
-  /* Delete button */
-  .card-delete {
-    position: absolute;
-    top: 10px; right: 40px;
-    background: rgba(255,100,100,0.15);
-    border: none;
-    border-radius: 8px;
-    color: #ff6b6b;
-    width: 26px; height: 26px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-size: 13px;
-    opacity: 0;
-    transition: opacity 0.2s, background 0.2s;
-    z-index: 5;
+  /* ── Order buttons (bottom-right) ── */
+  .card-order-row {
+    position:absolute; bottom:8px;right:8px;
+    display:flex; gap:4px; z-index:6;
+    opacity:0; transition:opacity 0.2s;
   }
+  .card.edit-active:hover .card-order-row { opacity:1; }
+  .card-btn-order {
+    background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5);
+    border:none; border-radius:7px;
+    width:26px;height:26px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer; font-size:12px;
+    transition:background 0.2s,transform 0.15s;
+  }
+  .card-btn-order:hover { background:rgba(255,255,255,0.2); transform:scale(1.15); }
 
-  .card:hover .card-delete {
-    opacity: 1;
+  /* ── Edit hint label ── */
+  .edit-hint {
+    position:absolute; bottom:36px;left:0;right:0;
+    text-align:center; font-size:11px;
+    color:rgba(108,99,255,0.7);
+    opacity:0; transition:opacity 0.2s;
+    pointer-events:none;
   }
-
-  .card-delete:hover {
-    background: rgba(255,100,100,0.3);
-  }
+  .card.edit-active:hover .edit-hint { opacity:1; }
 
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:translateY(0); }
   }
 
-  /* Add button */
+  /* ── Add button ── */
   .add-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-    padding: 16px 32px;
-    background: linear-gradient(135deg, var(--accent1), #8b85ff);
-    border: none;
-    border-radius: 100px;
-    color: #fff;
-    font-family: 'Gmarket Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-    box-shadow: 0 8px 32px rgba(108,99,255,0.45);
-    letter-spacing: 0.3px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%; max-width:320px; margin:0 auto;
+    padding:16px 32px;
+    background:linear-gradient(135deg,var(--accent1),#8b85ff);
+    border:none; border-radius:100px; color:#fff;
+    font-family:'Gmarket Sans',sans-serif; font-size:15px; font-weight:500;
+    cursor:pointer;
+    transition:transform 0.2s,box-shadow 0.2s;
+    box-shadow:0 8px 32px rgba(108,99,255,0.45);
   }
+  .add-btn:hover { transform:translateY(-2px); box-shadow:0 14px 48px rgba(108,99,255,0.6); }
+  .add-btn:active { transform:scale(0.97); }
 
-  .add-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 48px rgba(108,99,255,0.6);
-  }
-
-  .add-btn:active { transform: scale(0.97); }
-
-  /* Modal */
+  /* ── Modal ── */
   .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(5,5,15,0.75);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s;
+    position:fixed; inset:0;
+    background:rgba(5,5,15,0.78);
+    backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center;
+    z-index:100; opacity:0; pointer-events:none;
+    transition:opacity 0.25s;
   }
-
-  .modal-backdrop.open {
-    opacity: 1;
-    pointer-events: all;
-  }
-
+  .modal-backdrop.open { opacity:1; pointer-events:all; }
   .modal {
-    background: #16162a;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 24px;
-    padding: 36px 32px;
-    width: 100%;
-    max-width: 440px;
-    margin: 16px;
-    transform: translateY(24px) scale(0.97);
-    transition: transform 0.3s ease;
-    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    background:#16162a; border:1px solid rgba(255,255,255,0.1);
+    border-radius:24px; padding:36px 32px;
+    width:100%; max-width:440px; margin:16px;
+    transform:translateY(24px) scale(0.97);
+    transition:transform 0.3s ease;
+    box-shadow:0 32px 80px rgba(0,0,0,0.6);
   }
-
-  .modal-backdrop.open .modal {
-    transform: translateY(0) scale(1);
-  }
-
-  .modal h2 {
-    font-family: 'Gmarket Sans', sans-serif;
-    font-size: 22px;
-    color: #fff;
-    margin-bottom: 24px;
-  }
-
-  .form-group {
-    margin-bottom: 18px;
-  }
-
+  .modal-backdrop.open .modal { transform:translateY(0) scale(1); }
+  .modal h2 { font-family:'Gmarket Sans',sans-serif; font-size:22px; color:#fff; margin-bottom:24px; }
+  .form-group { margin-bottom:18px; }
   label {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
+    display:block; font-size:12px; font-weight:700;
+    letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--muted); margin-bottom:8px;
   }
-
   input[type="text"], input[type="url"] {
-    width: 100%;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    padding: 12px 16px;
-    color: #fff;
-    font-size: 14px;
-    font-family: 'Noto Sans KR', sans-serif;
-    outline: none;
-    transition: border-color 0.2s, background 0.2s;
+    width:100%;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:12px; padding:12px 16px;
+    color:#fff; font-size:14px;
+    font-family:'Noto Sans KR',sans-serif;
+    outline:none; transition:border-color 0.2s,background 0.2s;
   }
-
-  input:focus {
-    border-color: var(--accent1);
-    background: rgba(108,99,255,0.08);
-  }
-
-  /* Icon picker */
-  .icon-grid {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 8px;
-    margin-top: 4px;
-  }
-
+  input:focus { border-color:var(--accent1); background:rgba(108,99,255,0.08); }
+  .icon-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:8px; margin-top:4px; }
   .icon-opt {
-    aspect-ratio: 1;
-    background: rgba(255,255,255,0.05);
-    border: 2px solid transparent;
-    border-radius: 10px;
-    display: flex;align-items: center;justify-content: center;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    aspect-ratio:1; background:rgba(255,255,255,0.05);
+    border:2px solid transparent; border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px; cursor:pointer;
+    transition:background 0.15s,border-color 0.15s,transform 0.15s;
   }
-
-  .icon-opt:hover { background: rgba(255,255,255,0.1); transform: scale(1.1); }
-  .icon-opt.selected { border-color: var(--accent1); background: rgba(108,99,255,0.2); }
-
-  /* Color picker */
-  .color-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 4px;
-  }
-
+  .icon-opt:hover { background:rgba(255,255,255,0.1); transform:scale(1.1); }
+  .icon-opt.selected { border-color:var(--accent1); background:rgba(108,99,255,0.2); }
+  .color-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
   .color-opt {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 3px solid transparent;
-    transition: transform 0.15s, border-color 0.15s;
+    width:30px;height:30px; border-radius:50%; cursor:pointer;
+    border:3px solid transparent; transition:transform 0.15s,border-color 0.15s;
   }
-
-  .color-opt:hover { transform: scale(1.2); }
-  .color-opt.selected { border-color: #fff; }
-
-  .modal-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 28px;
-  }
-
+  .color-opt:hover { transform:scale(1.2); }
+  .color-opt.selected { border-color:#fff; }
+  .modal-actions { display:flex; gap:12px; margin-top:28px; }
   .btn-cancel {
-    flex: 1;
-    padding: 13px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    color: var(--muted);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.2s;
+    flex:1; padding:13px;
+    background:rgba(255,255,255,0.07);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:12px; color:var(--muted);
+    font-family:'Noto Sans KR',sans-serif; font-size:14px; cursor:pointer;
+    transition:background 0.2s;
   }
-
-  .btn-cancel:hover { background: rgba(255,255,255,0.12); }
-
+  .btn-cancel:hover { background:rgba(255,255,255,0.12); }
   .btn-save {
-    flex: 2;
-    padding: 13px;
-    background: linear-gradient(135deg, var(--accent1), #8b85ff);
-    border: none;
-    border-radius: 12px;
-    color: #fff;
-    font-family: 'Gmarket Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
-    box-shadow: 0 4px 20px rgba(108,99,255,0.4);
+    flex:2; padding:13px;
+    background:linear-gradient(135deg,var(--accent1),#8b85ff);
+    border:none; border-radius:12px; color:#fff;
+    font-family:'Gmarket Sans',sans-serif; font-size:14px; font-weight:500;
+    cursor:pointer; transition:opacity 0.2s,transform 0.2s;
+    box-shadow:0 4px 20px rgba(108,99,255,0.4);
   }
+  .btn-save:hover { opacity:0.9; transform:translateY(-1px); }
 
-  .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
-
-  /* Count badge */
-  .count-badge {
-    text-align: center;
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 24px;
-  }
-
-  .count-badge span {
-    color: var(--accent3);
-    font-weight: 700;
-  }
-
-  /* Toast */
+  /* ── Misc ── */
+  .count-badge { text-align:center; font-size:13px; color:var(--muted); margin-bottom:24px; }
+  .count-badge span { color:var(--accent3); font-weight:700; }
   .toast {
-    position: fixed;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: #1e1e30;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 100px;
-    padding: 12px 24px;
-    font-size: 14px;
-    color: var(--accent3);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s, transform 0.3s;
-    z-index: 200;
-    white-space: nowrap;
+    position:fixed; bottom:32px; left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:#1e1e30; border:1px solid rgba(255,255,255,0.1);
+    border-radius:100px; padding:12px 24px;
+    font-size:14px; color:var(--accent3);
+    opacity:0; pointer-events:none;
+    transition:opacity 0.3s,transform 0.3s; z-index:200;
   }
-
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  /* Edit mode toggle */
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
   .edit-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 50;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 100px;
-    padding: 8px 16px;
-    font-size: 12px;
-    color: var(--muted);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: background 0.2s;
-    font-family: 'Noto Sans KR', sans-serif;
+    position:fixed; top:20px;right:20px; z-index:50;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:100px; padding:8px 16px;
+    font-size:12px; color:var(--muted); cursor:pointer;
+    display:flex;align-items:center;gap:6px;
+    transition:background 0.2s; font-family:'Noto Sans KR',sans-serif;
   }
+  .edit-toggle:hover { background:rgba(255,255,255,0.1); }
+  .edit-toggle.active { color:var(--accent2); border-color:rgba(255,100,132,0.3); }
 
-  .edit-toggle:hover { background: rgba(255,255,255,0.1); }
-  .edit-toggle.active { color: var(--accent2); border-color: rgba(255,100,132,0.3); }
+  /* edit mode info bar */
+  .edit-info {
+    display:none; text-align:center; font-size:13px;
+    color:rgba(108,99,255,0.8); margin-bottom:16px;
+    padding:8px 16px; background:rgba(108,99,255,0.08);
+    border:1px solid rgba(108,99,255,0.2); border-radius:100px;
+  }
+  .edit-info.visible { display:block; }
 
-  @media (max-width: 480px) {
-    .container { padding: 40px 16px 80px; }
-    .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-    .icon-grid { grid-template-columns: repeat(6, 1fr); }
+  @media (max-width:480px) {
+    .container { padding:40px 16px 80px; }
+    .grid { grid-template-columns:1fr 1fr; gap:12px; }
+    .icon-grid { grid-template-columns:repeat(6,1fr); }
   }
 </style>
 </head>
@@ -512,6 +321,7 @@
   </header>
 
   <div class="count-badge">현재 <span id="siteCount">0</span>개의 사이트</div>
+  <div class="edit-info" id="editInfo">✏️ 카드에 마우스를 올리면 편집 · 삭제 · 순서 이동 버튼이 나타납니다</div>
 
   <div class="grid" id="grid"></div>
 
@@ -522,34 +332,29 @@
   </div>
 </div>
 
-<!-- Modal -->
+<!-- Add / Edit Modal -->
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal">
-    <h2>🌐 사이트 추가</h2>
-
+    <h2 id="modalTitle">🌐 사이트 추가</h2>
     <div class="form-group">
       <label>사이트 이름</label>
       <input type="text" id="inputName" placeholder="예: 학원 홈페이지" maxlength="30">
     </div>
-
     <div class="form-group">
       <label>URL 주소</label>
       <input type="url" id="inputUrl" placeholder="https://...">
     </div>
-
     <div class="form-group">
       <label>아이콘 선택</label>
       <div class="icon-grid" id="iconGrid"></div>
     </div>
-
     <div class="form-group">
       <label>색상 선택</label>
       <div class="color-row" id="colorRow"></div>
     </div>
-
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">취소</button>
-      <button class="btn-save" onclick="saveSite()">저장하기</button>
+      <button class="btn-save" id="btnSave" onclick="saveSite()">저장하기</button>
     </div>
   </div>
 </div>
@@ -557,66 +362,93 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const ICONS = ['🏫','💻','🤖','📚','⌨️','🏆','🎨','🎮','📊','🔬','🌍','✨','🎯','🛠️','📱','🎵','🔮','🚀','💡','📝','🌟','🧠','📐','🎪'];
+const ICONS  = ['🏫','💻','🤖','📚','⌨️','🏆','🎨','🎮','📊','🔬','🌍','✨','🎯','🛠️','📱','🎵','🔮','🚀','💡','📝','🌟','🧠','📐','🎪'];
 const COLORS = ['#6c63ff','#ff6584','#43e6b5','#ffd36e','#ff8c42','#5bc8f5','#b388ff','#69f0ae','#ff5252','#40c4ff','#e040fb','#f9a825'];
 
 let sites = [];
-let selectedIcon = ICONS[0];
+let selectedIcon  = ICONS[0];
 let selectedColor = COLORS[0];
-let editMode = false;
+let editMode   = false;
+let editingId  = null;
 
 const DEFAULT_SITES = [
-  { id: 1, name: '학원 홈페이지', url: 'https://www.quvia-lab.com', icon: '🏫', color: '#6c63ff' },
-  { id: 2, name: 'COS Pro 연습', url: 'https://quvia-nexus.github.io/coding-star/', icon: '💻', color: '#5bc8f5' },
-  { id: 3, name: '영상 생성형 AI 프롬프트 빌더', url: 'https://quvia-nexus.github.io/promptbuilder/', icon: '🤖', color: '#43e6b5' },
-  { id: 4, name: 'AI 동화책 만들기', url: 'https://quvia-nexus.github.io/PromptStory/', icon: '📚', color: '#ffd36e' },
-  { id: 5, name: '타자연습 기록', url: 'https://quvia-nexus.github.io/typing-records/', icon: '⌨️', color: '#ff8c42' },
-  { id: 6, name: 'AI·SW 사고력 올림피아드', url: 'https://quvia-olympiad-56.vercel.app/', icon: '🏆', color: '#ff6584' },
+  { id:1, name:'학원 홈페이지',           url:'https://www.quvia-lab.com',                          icon:'🏫', color:'#6c63ff' },
+  { id:2, name:'COS Pro 연습',             url:'https://quvia-nexus.github.io/coding-star/',         icon:'💻', color:'#5bc8f5' },
+  { id:3, name:'영상 생성형 AI 프롬프트 빌더', url:'https://quvia-nexus.github.io/promptbuilder/',   icon:'🤖', color:'#43e6b5' },
+  { id:4, name:'AI 동화책 만들기',          url:'https://quvia-nexus.github.io/PromptStory/',        icon:'📚', color:'#ffd36e' },
+  { id:5, name:'타자연습 기록',             url:'https://quvia-nexus.github.io/typing-records/',     icon:'⌨️', color:'#ff8c42' },
+  { id:6, name:'AI·SW 사고력 올림피아드',   url:'https://quvia-olympiad-56.vercel.app/',             icon:'🏆', color:'#ff6584' },
 ];
 
+/* ── Storage ── */
 function load() {
-  const saved = localStorage.getItem('launcher_sites_v3');
-  if (saved) {
-    sites = JSON.parse(saved);
-  } else {
-    sites = DEFAULT_SITES.map((s,i) => ({ ...s, id: Date.now() + i }));
-    save();
-  }
-  render();
+  try {
+    const saved = localStorage.getItem('launcher_sites_v3');
+    sites = saved ? JSON.parse(saved) : DEFAULT_SITES.map((s,i) => ({ ...s, id: Date.now()+i }));
+  } catch { sites = DEFAULT_SITES.map((s,i) => ({ ...s, id: Date.now()+i })); }
+  save(); render();
 }
-
 function save() {
   localStorage.setItem('launcher_sites_v3', JSON.stringify(sites));
 }
 
+/* ── Render ── */
 function render() {
   const grid = document.getElementById('grid');
   document.getElementById('siteCount').textContent = sites.length;
+  document.getElementById('editInfo').classList.toggle('visible', editMode);
 
-  grid.innerHTML = sites.map((s, i) => `
-    <a class="card" href="${s.url === '#' ? 'javascript:void(0)' : s.url}" 
-       style="--c:${s.color}; animation-delay:${i * 0.06}s"
-       ${s.url !== '#' ? 'target="_blank" rel="noopener"' : ''}
-       onclick="${s.url === '#' ? `showToast('URL을 설정해주세요!'); return false;` : ''}">
-      ${editMode ? `<button class="card-delete" onclick="deleteSite(event,${s.id})">✕</button>` : ''}
-      <div class="card-icon">${s.icon}</div>
-      <div class="card-name">${s.name}</div>
-      <div class="card-url">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        ${s.url === '#' ? 'URL 미설정' : s.url.replace('https://','').replace('http://','').substring(0,32)}
+  grid.innerHTML = sites.map((s, i) => {
+    const shortUrl = s.url.replace(/^https?:\/\//,'').substring(0, 34);
+    const btnRow = editMode ? `
+      <div class="card-btn-row">
+        <button class="card-btn card-btn-edit"   onclick="openEditModal(event,${s.id})" title="편집">✏️</button>
+        <button class="card-btn card-btn-delete" onclick="deleteSite(event,${s.id})"   title="삭제">✕</button>
       </div>
-      <span class="card-arrow">→</span>
-    </a>
-  `).join('');
+      <div class="card-order-row">
+        <button class="card-btn-order" onclick="moveSite(event,${s.id},-1)" title="앞으로">◀</button>
+        <button class="card-btn-order" onclick="moveSite(event,${s.id}, 1)" title="뒤로">▶</button>
+      </div>` : '';
+
+    const href   = editMode ? 'javascript:void(0)' : s.url;
+    const target = editMode ? '' : 'target="_blank" rel="noopener"';
+
+    return `
+      <a class="card${editMode ? ' edit-active' : ''}"
+         href="${href}" ${target}
+         style="--c:${s.color}; animation-delay:${i*0.06}s">
+        ${btnRow}
+        <div class="card-icon">${s.icon}</div>
+        <div class="card-name">${s.name}</div>
+        <div class="card-url">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          ${shortUrl}
+        </div>
+        ${editMode ? '' : '<span class="card-arrow">→</span>'}
+      </a>`;
+  }).join('');
 }
 
+/* ── Card actions ── */
 function deleteSite(e, id) {
-  e.preventDefault();
-  e.stopPropagation();
+  e.preventDefault(); e.stopPropagation();
+  if (!confirm('이 사이트를 삭제할까요?')) return;
   sites = sites.filter(s => s.id !== id);
-  save();
-  render();
-  showToast('삭제되었습니다');
+  save(); render();
+  showToast('🗑️ 삭제되었습니다');
+}
+
+function moveSite(e, id, dir) {
+  e.preventDefault(); e.stopPropagation();
+  const idx = sites.findIndex(s => s.id === id);
+  const nxt = idx + dir;
+  if (nxt < 0 || nxt >= sites.length) return;
+  [sites[idx], sites[nxt]] = [sites[nxt], sites[idx]];
+  save(); render();
 }
 
 function toggleEditMode() {
@@ -627,60 +459,81 @@ function toggleEditMode() {
   render();
 }
 
-// Modal
+/* ── Modal helpers ── */
 function buildIconGrid() {
-  document.getElementById('iconGrid').innerHTML = ICONS.map(ic => `
-    <div class="icon-opt ${ic === selectedIcon ? 'selected' : ''}" onclick="selectIcon('${ic}',this)">${ic}</div>
-  `).join('');
+  document.getElementById('iconGrid').innerHTML = ICONS.map(ic =>
+    `<div class="icon-opt${ic===selectedIcon?' selected':''}" onclick="selectIcon('${ic}',this)">${ic}</div>`
+  ).join('');
 }
-
 function buildColorRow() {
-  document.getElementById('colorRow').innerHTML = COLORS.map(c => `
-    <div class="color-opt ${c === selectedColor ? 'selected' : ''}" 
-         style="background:${c}" onclick="selectColor('${c}',this)"></div>
-  `).join('');
+  document.getElementById('colorRow').innerHTML = COLORS.map(c =>
+    `<div class="color-opt${c===selectedColor?' selected':''}" style="background:${c}" onclick="selectColor('${c}',this)"></div>`
+  ).join('');
 }
-
 function selectIcon(ic, el) {
   selectedIcon = ic;
   document.querySelectorAll('.icon-opt').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
 }
-
 function selectColor(c, el) {
   selectedColor = c;
   document.querySelectorAll('.color-opt').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
 }
 
+/* ── Open modal: ADD ── */
 function openModal() {
-  selectedIcon = ICONS[0];
+  editingId = null;
+  selectedIcon  = ICONS[0];
   selectedColor = COLORS[0];
+  document.getElementById('modalTitle').textContent = '🌐 사이트 추가';
+  document.getElementById('btnSave').textContent    = '저장하기';
   document.getElementById('inputName').value = '';
-  document.getElementById('inputUrl').value = '';
-  buildIconGrid();
-  buildColorRow();
+  document.getElementById('inputUrl').value  = '';
+  buildIconGrid(); buildColorRow();
+  document.getElementById('modalBackdrop').classList.add('open');
+  setTimeout(() => document.getElementById('inputName').focus(), 200);
+}
+
+/* ── Open modal: EDIT ── */
+function openEditModal(e, id) {
+  e.preventDefault(); e.stopPropagation();
+  const s = sites.find(x => x.id === id);
+  if (!s) return;
+  editingId     = id;
+  selectedIcon  = s.icon;
+  selectedColor = s.color;
+  document.getElementById('modalTitle').textContent = '✏️ 사이트 편집';
+  document.getElementById('btnSave').textContent    = '수정하기';
+  document.getElementById('inputName').value = s.name;
+  document.getElementById('inputUrl').value  = s.url;
+  buildIconGrid(); buildColorRow();
   document.getElementById('modalBackdrop').classList.add('open');
   setTimeout(() => document.getElementById('inputName').focus(), 200);
 }
 
 function closeModal() {
   document.getElementById('modalBackdrop').classList.remove('open');
+  editingId = null;
 }
 
 function saveSite() {
   const name = document.getElementById('inputName').value.trim();
-  let url = document.getElementById('inputUrl').value.trim();
-
+  let   url  = document.getElementById('inputUrl').value.trim();
   if (!name) { showToast('이름을 입력해주세요!'); return; }
-  if (!url) { showToast('URL을 입력해주세요!'); return; }
+  if (!url)  { showToast('URL을 입력해주세요!');  return; }
   if (!url.startsWith('http')) url = 'https://' + url;
 
-  sites.push({ id: Date.now(), name, url, icon: selectedIcon, color: selectedColor });
-  save();
-  render();
-  closeModal();
-  showToast('✨ 사이트가 추가되었습니다!');
+  if (editingId !== null) {
+    sites = sites.map(s => s.id === editingId
+      ? { ...s, name, url, icon: selectedIcon, color: selectedColor }
+      : s);
+    showToast('✅ 수정되었습니다!');
+  } else {
+    sites.push({ id: Date.now(), name, url, icon: selectedIcon, color: selectedColor });
+    showToast('✨ 사이트가 추가되었습니다!');
+  }
+  save(); render(); closeModal();
 }
 
 function showToast(msg) {
@@ -690,12 +543,9 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// Close modal on backdrop click
 document.getElementById('modalBackdrop').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
-
-// Enter key
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
   if (e.key === 'Enter' && document.getElementById('modalBackdrop').classList.contains('open')) saveSite();
