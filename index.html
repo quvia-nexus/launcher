@@ -7,302 +7,155 @@
 <link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;500;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a12;
-    --card: #13131f;
-    --card-hover: #1c1c2e;
+    --bg: #0a0a12; --card: #13131f; --card-hover: #1c1c2e;
     --border: rgba(255,255,255,0.07);
-    --accent1: #6c63ff;
-    --accent2: #ff6584;
-    --accent3: #43e6b5;
-    --text: #e8e8f0;
-    --muted: #7a7a9a;
+    --accent1: #6c63ff; --accent2: #ff6584; --accent3: #43e6b5;
+    --text: #e8e8f0; --muted: #7a7a9a;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans KR', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-serif; min-height:100vh; overflow-x:hidden; }
   body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
-    z-index: 0;
+    content:''; position:fixed; inset:0;
+    background-image: linear-gradient(rgba(108,99,255,0.04) 1px,transparent 1px), linear-gradient(90deg,rgba(108,99,255,0.04) 1px,transparent 1px);
+    background-size:48px 48px; pointer-events:none; z-index:0;
   }
-  .orb {
-    position: fixed; border-radius: 50%;
-    filter: blur(100px); opacity: 0.18;
-    pointer-events: none; z-index: 0;
-    animation: floatOrb 12s ease-in-out infinite;
-  }
-  .orb1 { width:480px;height:480px;background:var(--accent1);top:-120px;left:-100px;animation-delay:0s; }
+  .orb { position:fixed; border-radius:50%; filter:blur(100px); opacity:0.18; pointer-events:none; z-index:0; animation:floatOrb 12s ease-in-out infinite; }
+  .orb1 { width:480px;height:480px;background:var(--accent1);top:-120px;left:-100px; }
   .orb2 { width:320px;height:320px;background:var(--accent2);bottom:-80px;right:-60px;animation-delay:-5s; }
   .orb3 { width:240px;height:240px;background:var(--accent3);top:40%;left:55%;animation-delay:-9s; }
-  @keyframes floatOrb {
-    0%,100% { transform:translate(0,0); }
-    33% { transform:translate(30px,-30px); }
-    66% { transform:translate(-20px,20px); }
-  }
-  .container {
-    position: relative; z-index: 1;
-    max-width: 960px; margin: 0 auto;
-    padding: 60px 24px 100px;
-  }
+  @keyframes floatOrb { 0%,100%{transform:translate(0,0)} 33%{transform:translate(30px,-30px)} 66%{transform:translate(-20px,20px)} }
+
+  .container { position:relative; z-index:1; max-width:960px; margin:0 auto; padding:60px 24px 100px; }
   header { text-align:center; margin-bottom:56px; animation:fadeDown 0.7s ease both; }
-  @keyframes fadeDown {
-    from { opacity:0; transform:translateY(-24px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-24px)} to{opacity:1;transform:translateY(0)} }
+
   .logo-badge {
     display:inline-flex; align-items:center; gap:8px;
     background:rgba(108,99,255,0.15); border:1px solid rgba(108,99,255,0.35);
-    border-radius:100px; padding:6px 18px;
-    font-size:12px; font-weight:700; letter-spacing:2px;
-    color:var(--accent1); text-transform:uppercase; margin-bottom:20px;
+    border-radius:100px; padding:6px 18px; font-size:12px; font-weight:700;
+    letter-spacing:2px; color:var(--accent1); text-transform:uppercase; margin-bottom:20px;
   }
-  .logo-badge .dot {
-    width:7px;height:7px;background:var(--accent1);
-    border-radius:50%;animation:pulse 2s ease infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity:1;transform:scale(1); }
-    50%      { opacity:0.4;transform:scale(0.7); }
-  }
+  .logo-badge .dot { width:7px;height:7px;background:var(--accent1);border-radius:50%;animation:pulse 2s ease infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
   h1 {
-    font-family:'Gmarket Sans',sans-serif;
-    font-size:clamp(32px,5vw,52px); font-weight:700;
+    font-family:'Gmarket Sans',sans-serif; font-size:clamp(32px,5vw,52px); font-weight:700;
     background:linear-gradient(135deg,#fff 30%,var(--accent1));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    background-clip:text; line-height:1.2; margin-bottom:14px;
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    line-height:1.2; margin-bottom:14px;
   }
   .subtitle { color:var(--muted); font-size:15px; }
-  .grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-    gap:18px; margin-bottom:40px;
-  }
+
+  /* ── Grid ── */
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:18px; margin-bottom:40px; }
 
   /* ── Card ── */
   .card {
-    position:relative; background:var(--card);
-    border:1px solid var(--border); border-radius:18px;
-    padding:28px 24px 24px; cursor:pointer;
+    position:relative; background:var(--card); border:1px solid var(--border);
+    border-radius:18px; padding:28px 24px 24px; cursor:pointer;
     text-decoration:none; display:flex; flex-direction:column; gap:10px;
-    transition:transform 0.22s,background 0.22s,border-color 0.22s,box-shadow 0.22s;
-    animation:fadeUp 0.5s ease both; overflow:hidden;
+    transition:transform 0.22s, background 0.22s, border-color 0.22s, box-shadow 0.22s, opacity 0.18s;
+    animation:fadeUp 0.5s ease both; overflow:hidden; user-select:none;
   }
   .card::before {
     content:''; position:absolute; top:0;left:0;right:0; height:3px;
     background:var(--c,var(--accent1)); border-radius:18px 18px 0 0; opacity:0.85;
   }
+  /* normal hover */
   .card:not(.edit-active):hover {
     background:var(--card-hover); border-color:rgba(255,255,255,0.13);
     transform:translateY(-5px) scale(1.01);
     box-shadow:0 20px 60px rgba(0,0,0,0.45),0 0 0 1px rgba(255,255,255,0.06);
   }
-  .card.edit-active { cursor:default; border-color:rgba(108,99,255,0.2); }
-  .card.edit-active:hover { border-color:rgba(108,99,255,0.45); background:var(--card-hover); }
+  /* edit mode */
+  .card.edit-active { cursor:grab; border-color:rgba(108,99,255,0.2); }
+  .card.edit-active:hover { background:var(--card-hover); border-color:rgba(108,99,255,0.45); }
 
-  .card-icon { font-size:30px; line-height:1; }
-  .card-name { font-family:'Gmarket Sans',sans-serif; font-size:17px; font-weight:500; color:#fff; }
-  .card-url {
-    font-size:11px; color:var(--muted); word-break:break-all;
-    margin-top:auto; display:flex; align-items:center; gap:5px;
+  /* dragging states */
+  .card.dragging { opacity:0.35; transform:scale(0.97); cursor:grabbing; box-shadow:none; }
+  .card.drag-over {
+    border-color:var(--accent1) !important;
+    box-shadow:0 0 0 2px var(--accent1), 0 16px 48px rgba(108,99,255,0.4);
+    transform:scale(1.03);
   }
-  .card-url svg { flex-shrink:0; opacity:0.5; }
-  .card-arrow {
-    position:absolute; top:24px;right:20px; font-size:18px;
-    opacity:0; color:var(--muted);
-    transform:translateX(-6px); transition:opacity 0.2s,transform 0.2s;
-  }
-  .card:not(.edit-active):hover .card-arrow { opacity:1; transform:translateX(0); }
 
-  /* ── Edit mode button row (top-right) ── */
-  .card-btn-row {
-    position:absolute; top:8px;right:8px;
-    display:flex; gap:4px; z-index:6;
-    opacity:0; transition:opacity 0.2s;
-  }
-  .card.edit-active:hover .card-btn-row { opacity:1; }
-  .card-btn {
-    border:none; border-radius:8px;
-    width:28px;height:28px;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer; font-size:13px;
-    transition:background 0.2s,transform 0.15s;
-  }
-  .card-btn:hover { transform:scale(1.15); }
-  .card-btn-edit  { background:rgba(108,99,255,0.22); color:#a89fff; }
-  .card-btn-edit:hover  { background:rgba(108,99,255,0.45); }
-  .card-btn-delete{ background:rgba(255,100,100,0.18); color:#ff6b6b; }
-  .card-btn-delete:hover{ background:rgba(255,100,100,0.38); }
-
-  /* ── Order buttons (bottom-right) ── */
-  .card-order-row {
-    position:absolute; bottom:8px;right:8px;
-    display:flex; gap:4px; z-index:6;
-    opacity:0; transition:opacity 0.2s;
-  }
-  .card.edit-active:hover .card-order-row { opacity:1; }
-  .card-btn-order {
-    background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5);
-    border:none; border-radius:7px;
-    width:26px;height:26px;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer; font-size:12px;
-    transition:background 0.2s,transform 0.15s;
-  }
-  .card-btn-order:hover { background:rgba(255,255,255,0.2); transform:scale(1.15); }
-
-  /* ── Edit hint label ── */
-  .edit-hint {
-    position:absolute; bottom:36px;left:0;right:0;
-    text-align:center; font-size:11px;
-    color:rgba(108,99,255,0.7);
+  /* drag handle shown in edit mode */
+  .drag-handle {
+    position:absolute; top:50%; left:10px;
+    transform:translateY(-50%);
+    font-size:16px; color:rgba(255,255,255,0.2);
     opacity:0; transition:opacity 0.2s;
     pointer-events:none;
   }
-  .card.edit-active:hover .edit-hint { opacity:1; }
+  .card.edit-active:hover .drag-handle { opacity:1; }
 
-  @keyframes fadeUp {
-    from { opacity:0; transform:translateY(20px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
+  .card-icon { font-size:30px; line-height:1; }
+  .card-name { font-family:'Gmarket Sans',sans-serif; font-size:17px; font-weight:500; color:#fff; }
+  .card-url { font-size:11px; color:var(--muted); word-break:break-all; margin-top:auto; display:flex; align-items:center; gap:5px; }
+  .card-url svg { flex-shrink:0; opacity:0.5; }
+  .card-arrow { position:absolute; top:24px;right:20px; font-size:18px; opacity:0; color:var(--muted); transform:translateX(-6px); transition:opacity 0.2s,transform 0.2s; }
+  .card:not(.edit-active):hover .card-arrow { opacity:1; transform:translateX(0); }
+
+  /* edit action buttons */
+  .card-btn-row { position:absolute; top:8px;right:8px; display:flex; gap:4px; z-index:6; opacity:0; transition:opacity 0.2s; }
+  .card.edit-active:hover .card-btn-row { opacity:1; }
+  .card-btn { border:none; border-radius:8px; width:28px;height:28px; display:flex;align-items:center;justify-content:center; cursor:pointer; font-size:13px; transition:background 0.2s,transform 0.15s; }
+  .card-btn:hover { transform:scale(1.15); }
+  .card-btn-edit   { background:rgba(108,99,255,0.22); color:#a89fff; }
+  .card-btn-edit:hover   { background:rgba(108,99,255,0.45); }
+  .card-btn-delete { background:rgba(255,100,100,0.18); color:#ff6b6b; }
+  .card-btn-delete:hover { background:rgba(255,100,100,0.38); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
   /* ── Add button ── */
   .add-btn {
     display:flex; align-items:center; justify-content:center; gap:10px;
-    width:100%; max-width:320px; margin:0 auto;
-    padding:16px 32px;
+    width:100%; max-width:320px; margin:0 auto; padding:16px 32px;
     background:linear-gradient(135deg,var(--accent1),#8b85ff);
     border:none; border-radius:100px; color:#fff;
     font-family:'Gmarket Sans',sans-serif; font-size:15px; font-weight:500;
-    cursor:pointer;
-    transition:transform 0.2s,box-shadow 0.2s;
+    cursor:pointer; transition:transform 0.2s,box-shadow 0.2s;
     box-shadow:0 8px 32px rgba(108,99,255,0.45);
   }
   .add-btn:hover { transform:translateY(-2px); box-shadow:0 14px 48px rgba(108,99,255,0.6); }
   .add-btn:active { transform:scale(0.97); }
 
   /* ── Modal ── */
-  .modal-backdrop {
-    position:fixed; inset:0;
-    background:rgba(5,5,15,0.78);
-    backdrop-filter:blur(8px);
-    display:flex; align-items:center; justify-content:center;
-    z-index:100; opacity:0; pointer-events:none;
-    transition:opacity 0.25s;
-  }
+  .modal-backdrop { position:fixed;inset:0; background:rgba(5,5,15,0.78); backdrop-filter:blur(8px); display:flex;align-items:center;justify-content:center; z-index:100; opacity:0; pointer-events:none; transition:opacity 0.25s; }
   .modal-backdrop.open { opacity:1; pointer-events:all; }
-  .modal {
-    background:#16162a; border:1px solid rgba(255,255,255,0.1);
-    border-radius:24px; padding:36px 32px;
-    width:100%; max-width:440px; margin:16px;
-    transform:translateY(24px) scale(0.97);
-    transition:transform 0.3s ease;
-    box-shadow:0 32px 80px rgba(0,0,0,0.6);
-  }
+  .modal { background:#16162a; border:1px solid rgba(255,255,255,0.1); border-radius:24px; padding:36px 32px; width:100%; max-width:440px; margin:16px; transform:translateY(24px) scale(0.97); transition:transform 0.3s ease; box-shadow:0 32px 80px rgba(0,0,0,0.6); }
   .modal-backdrop.open .modal { transform:translateY(0) scale(1); }
   .modal h2 { font-family:'Gmarket Sans',sans-serif; font-size:22px; color:#fff; margin-bottom:24px; }
   .form-group { margin-bottom:18px; }
-  label {
-    display:block; font-size:12px; font-weight:700;
-    letter-spacing:1.5px; text-transform:uppercase;
-    color:var(--muted); margin-bottom:8px;
-  }
-  input[type="text"], input[type="url"] {
-    width:100%;
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:12px; padding:12px 16px;
-    color:#fff; font-size:14px;
-    font-family:'Noto Sans KR',sans-serif;
-    outline:none; transition:border-color 0.2s,background 0.2s;
-  }
+  label { display:block; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+  input[type="text"], input[type="url"] { width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px 16px; color:#fff; font-size:14px; font-family:'Noto Sans KR',sans-serif; outline:none; transition:border-color 0.2s,background 0.2s; }
   input:focus { border-color:var(--accent1); background:rgba(108,99,255,0.08); }
   .icon-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:8px; margin-top:4px; }
-  .icon-opt {
-    aspect-ratio:1; background:rgba(255,255,255,0.05);
-    border:2px solid transparent; border-radius:10px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:20px; cursor:pointer;
-    transition:background 0.15s,border-color 0.15s,transform 0.15s;
-  }
+  .icon-opt { aspect-ratio:1; background:rgba(255,255,255,0.05); border:2px solid transparent; border-radius:10px; display:flex;align-items:center;justify-content:center; font-size:20px; cursor:pointer; transition:background 0.15s,border-color 0.15s,transform 0.15s; }
   .icon-opt:hover { background:rgba(255,255,255,0.1); transform:scale(1.1); }
   .icon-opt.selected { border-color:var(--accent1); background:rgba(108,99,255,0.2); }
   .color-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
-  .color-opt {
-    width:30px;height:30px; border-radius:50%; cursor:pointer;
-    border:3px solid transparent; transition:transform 0.15s,border-color 0.15s;
-  }
+  .color-opt { width:30px;height:30px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:transform 0.15s,border-color 0.15s; }
   .color-opt:hover { transform:scale(1.2); }
   .color-opt.selected { border-color:#fff; }
   .modal-actions { display:flex; gap:12px; margin-top:28px; }
-  .btn-cancel {
-    flex:1; padding:13px;
-    background:rgba(255,255,255,0.07);
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:12px; color:var(--muted);
-    font-family:'Noto Sans KR',sans-serif; font-size:14px; cursor:pointer;
-    transition:background 0.2s;
-  }
+  .btn-cancel { flex:1; padding:13px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); border-radius:12px; color:var(--muted); font-family:'Noto Sans KR',sans-serif; font-size:14px; cursor:pointer; transition:background 0.2s; }
   .btn-cancel:hover { background:rgba(255,255,255,0.12); }
-  .btn-save {
-    flex:2; padding:13px;
-    background:linear-gradient(135deg,var(--accent1),#8b85ff);
-    border:none; border-radius:12px; color:#fff;
-    font-family:'Gmarket Sans',sans-serif; font-size:14px; font-weight:500;
-    cursor:pointer; transition:opacity 0.2s,transform 0.2s;
-    box-shadow:0 4px 20px rgba(108,99,255,0.4);
-  }
+  .btn-save { flex:2; padding:13px; background:linear-gradient(135deg,var(--accent1),#8b85ff); border:none; border-radius:12px; color:#fff; font-family:'Gmarket Sans',sans-serif; font-size:14px; font-weight:500; cursor:pointer; transition:opacity 0.2s,transform 0.2s; box-shadow:0 4px 20px rgba(108,99,255,0.4); }
   .btn-save:hover { opacity:0.9; transform:translateY(-1px); }
 
   /* ── Misc ── */
   .count-badge { text-align:center; font-size:13px; color:var(--muted); margin-bottom:24px; }
   .count-badge span { color:var(--accent3); font-weight:700; }
-  .toast {
-    position:fixed; bottom:32px; left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:#1e1e30; border:1px solid rgba(255,255,255,0.1);
-    border-radius:100px; padding:12px 24px;
-    font-size:14px; color:var(--accent3);
-    opacity:0; pointer-events:none;
-    transition:opacity 0.3s,transform 0.3s; z-index:200;
-  }
+  .edit-info { display:none; text-align:center; font-size:13px; color:rgba(108,99,255,0.85); margin-bottom:16px; padding:8px 16px; background:rgba(108,99,255,0.08); border:1px solid rgba(108,99,255,0.2); border-radius:100px; }
+  .edit-info.visible { display:block; }
+  .toast { position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(20px); background:#1e1e30; border:1px solid rgba(255,255,255,0.1); border-radius:100px; padding:12px 24px; font-size:14px; color:var(--accent3); opacity:0; pointer-events:none; transition:opacity 0.3s,transform 0.3s; z-index:200; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-  .edit-toggle {
-    position:fixed; top:20px;right:20px; z-index:50;
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:100px; padding:8px 16px;
-    font-size:12px; color:var(--muted); cursor:pointer;
-    display:flex;align-items:center;gap:6px;
-    transition:background 0.2s; font-family:'Noto Sans KR',sans-serif;
-  }
+  .edit-toggle { position:fixed; top:20px;right:20px; z-index:50; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:100px; padding:8px 16px; font-size:12px; color:var(--muted); cursor:pointer; display:flex;align-items:center;gap:6px; transition:background 0.2s; font-family:'Noto Sans KR',sans-serif; }
   .edit-toggle:hover { background:rgba(255,255,255,0.1); }
   .edit-toggle.active { color:var(--accent2); border-color:rgba(255,100,132,0.3); }
 
-  /* edit mode info bar */
-  .edit-info {
-    display:none; text-align:center; font-size:13px;
-    color:rgba(108,99,255,0.8); margin-bottom:16px;
-    padding:8px 16px; background:rgba(108,99,255,0.08);
-    border:1px solid rgba(108,99,255,0.2); border-radius:100px;
-  }
-  .edit-info.visible { display:block; }
-
-  @media (max-width:480px) {
-    .container { padding:40px 16px 80px; }
-    .grid { grid-template-columns:1fr 1fr; gap:12px; }
-    .icon-grid { grid-template-columns:repeat(6,1fr); }
-  }
+  @media(max-width:480px) { .container{padding:40px 16px 80px} .grid{grid-template-columns:1fr 1fr;gap:12px} .icon-grid{grid-template-columns:repeat(6,1fr)} }
 </style>
 </head>
 <body>
@@ -319,16 +172,11 @@
     <h1>나의 웹사이트 모음</h1>
     <p class="subtitle">자주 가는 사이트를 한 곳에서 바로 이동하세요</p>
   </header>
-
   <div class="count-badge">현재 <span id="siteCount">0</span>개의 사이트</div>
-  <div class="edit-info" id="editInfo">✏️ 카드에 마우스를 올리면 편집 · 삭제 · 순서 이동 버튼이 나타납니다</div>
-
+  <div class="edit-info" id="editInfo">⠿ 카드를 드래그해서 순서를 바꾸고, ✏️ · ✕ 버튼으로 편집·삭제하세요</div>
   <div class="grid" id="grid"></div>
-
   <div style="text-align:center;">
-    <button class="add-btn" onclick="openModal()">
-      <span style="font-size:20px">＋</span> 새 사이트 추가
-    </button>
+    <button class="add-btn" onclick="openModal()"><span style="font-size:20px">＋</span> 새 사이트 추가</button>
   </div>
 </div>
 
@@ -368,29 +216,27 @@ const COLORS = ['#6c63ff','#ff6584','#43e6b5','#ffd36e','#ff8c42','#5bc8f5','#b3
 let sites = [];
 let selectedIcon  = ICONS[0];
 let selectedColor = COLORS[0];
-let editMode   = false;
-let editingId  = null;
+let editMode  = false;
+let editingId = null;
 
 const DEFAULT_SITES = [
-  { id:1, name:'학원 홈페이지',           url:'https://www.quvia-lab.com',                          icon:'🏫', color:'#6c63ff' },
-  { id:2, name:'COS Pro 연습',             url:'https://quvia-nexus.github.io/coding-star/',         icon:'💻', color:'#5bc8f5' },
-  { id:3, name:'영상 생성형 AI 프롬프트 빌더', url:'https://quvia-nexus.github.io/promptbuilder/',   icon:'🤖', color:'#43e6b5' },
-  { id:4, name:'AI 동화책 만들기',          url:'https://quvia-nexus.github.io/PromptStory/',        icon:'📚', color:'#ffd36e' },
-  { id:5, name:'타자연습 기록',             url:'https://quvia-nexus.github.io/typing-records/',     icon:'⌨️', color:'#ff8c42' },
-  { id:6, name:'AI·SW 사고력 올림피아드',   url:'https://quvia-olympiad-56.vercel.app/',             icon:'🏆', color:'#ff6584' },
+  { id:1, name:'학원 홈페이지',                url:'https://www.quvia-lab.com',                        icon:'🏫', color:'#6c63ff' },
+  { id:2, name:'COS Pro 연습',                  url:'https://quvia-nexus.github.io/coding-star/',       icon:'💻', color:'#5bc8f5' },
+  { id:3, name:'영상 생성형 AI 프롬프트 빌더',  url:'https://quvia-nexus.github.io/promptbuilder/',     icon:'🤖', color:'#43e6b5' },
+  { id:4, name:'AI 동화책 만들기',              url:'https://quvia-nexus.github.io/PromptStory/',       icon:'📚', color:'#ffd36e' },
+  { id:5, name:'타자연습 기록',                 url:'https://quvia-nexus.github.io/typing-records/',    icon:'⌨️', color:'#ff8c42' },
+  { id:6, name:'AI·SW 사고력 올림피아드',       url:'https://quvia-olympiad-56.vercel.app/',            icon:'🏆', color:'#ff6584' },
 ];
 
 /* ── Storage ── */
 function load() {
   try {
     const saved = localStorage.getItem('launcher_sites_v3');
-    sites = saved ? JSON.parse(saved) : DEFAULT_SITES.map((s,i) => ({ ...s, id: Date.now()+i }));
-  } catch { sites = DEFAULT_SITES.map((s,i) => ({ ...s, id: Date.now()+i })); }
+    sites = saved ? JSON.parse(saved) : DEFAULT_SITES.map((s,i)=>({...s,id:Date.now()+i}));
+  } catch { sites = DEFAULT_SITES.map((s,i)=>({...s,id:Date.now()+i})); }
   save(); render();
 }
-function save() {
-  localStorage.setItem('launcher_sites_v3', JSON.stringify(sites));
-}
+function save() { localStorage.setItem('launcher_sites_v3', JSON.stringify(sites)); }
 
 /* ── Render ── */
 function render() {
@@ -398,25 +244,24 @@ function render() {
   document.getElementById('siteCount').textContent = sites.length;
   document.getElementById('editInfo').classList.toggle('visible', editMode);
 
-  grid.innerHTML = sites.map((s, i) => {
-    const shortUrl = s.url.replace(/^https?:\/\//,'').substring(0, 34);
+  grid.innerHTML = sites.map((s,i) => {
+    const shortUrl = s.url.replace(/^https?:\/\//,'').substring(0,34);
     const btnRow = editMode ? `
       <div class="card-btn-row">
         <button class="card-btn card-btn-edit"   onclick="openEditModal(event,${s.id})" title="편집">✏️</button>
         <button class="card-btn card-btn-delete" onclick="deleteSite(event,${s.id})"   title="삭제">✕</button>
       </div>
-      <div class="card-order-row">
-        <button class="card-btn-order" onclick="moveSite(event,${s.id},-1)" title="앞으로">◀</button>
-        <button class="card-btn-order" onclick="moveSite(event,${s.id}, 1)" title="뒤로">▶</button>
-      </div>` : '';
+      <div class="drag-handle">⠿⠿</div>` : '';
 
     const href   = editMode ? 'javascript:void(0)' : s.url;
     const target = editMode ? '' : 'target="_blank" rel="noopener"';
 
     return `
-      <a class="card${editMode ? ' edit-active' : ''}"
+      <a class="card${editMode?' edit-active':''}"
          href="${href}" ${target}
-         style="--c:${s.color}; animation-delay:${i*0.06}s">
+         data-id="${s.id}"
+         style="--c:${s.color};animation-delay:${i*0.06}s"
+         ${editMode ? `draggable="true"` : ''}>
         ${btnRow}
         <div class="card-icon">${s.icon}</div>
         <div class="card-name">${s.name}</div>
@@ -431,6 +276,60 @@ function render() {
         ${editMode ? '' : '<span class="card-arrow">→</span>'}
       </a>`;
   }).join('');
+
+  if (editMode) initDrag();
+}
+
+/* ── Drag & Drop ── */
+let dragSrcId = null;
+
+function initDrag() {
+  const cards = document.querySelectorAll('.card.edit-active');
+  cards.forEach(card => {
+    card.addEventListener('dragstart', onDragStart);
+    card.addEventListener('dragend',   onDragEnd);
+    card.addEventListener('dragover',  onDragOver);
+    card.addEventListener('dragleave', onDragLeave);
+    card.addEventListener('drop',      onDrop);
+  });
+}
+
+function onDragStart(e) {
+  dragSrcId = parseInt(this.dataset.id);
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onDragEnd(e) {
+  this.classList.remove('dragging');
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('drag-over'));
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const targetId = parseInt(this.dataset.id);
+  if (targetId !== dragSrcId) this.classList.add('drag-over');
+}
+
+function onDragLeave(e) {
+  this.classList.remove('drag-over');
+}
+
+function onDrop(e) {
+  e.preventDefault(); e.stopPropagation();
+  this.classList.remove('drag-over');
+  const targetId = parseInt(this.dataset.id);
+  if (targetId === dragSrcId) return;
+
+  const srcIdx = sites.findIndex(s => s.id === dragSrcId);
+  const tgtIdx = sites.findIndex(s => s.id === targetId);
+  if (srcIdx === -1 || tgtIdx === -1) return;
+
+  // reorder
+  const [moved] = sites.splice(srcIdx, 1);
+  sites.splice(tgtIdx, 0, moved);
+  save(); render();
 }
 
 /* ── Card actions ── */
@@ -440,15 +339,6 @@ function deleteSite(e, id) {
   sites = sites.filter(s => s.id !== id);
   save(); render();
   showToast('🗑️ 삭제되었습니다');
-}
-
-function moveSite(e, id, dir) {
-  e.preventDefault(); e.stopPropagation();
-  const idx = sites.findIndex(s => s.id === id);
-  const nxt = idx + dir;
-  if (nxt < 0 || nxt >= sites.length) return;
-  [sites[idx], sites[nxt]] = [sites[nxt], sites[idx]];
-  save(); render();
 }
 
 function toggleEditMode() {
@@ -481,11 +371,9 @@ function selectColor(c, el) {
   el.classList.add('selected');
 }
 
-/* ── Open modal: ADD ── */
 function openModal() {
   editingId = null;
-  selectedIcon  = ICONS[0];
-  selectedColor = COLORS[0];
+  selectedIcon = ICONS[0]; selectedColor = COLORS[0];
   document.getElementById('modalTitle').textContent = '🌐 사이트 추가';
   document.getElementById('btnSave').textContent    = '저장하기';
   document.getElementById('inputName').value = '';
@@ -495,14 +383,11 @@ function openModal() {
   setTimeout(() => document.getElementById('inputName').focus(), 200);
 }
 
-/* ── Open modal: EDIT ── */
 function openEditModal(e, id) {
   e.preventDefault(); e.stopPropagation();
   const s = sites.find(x => x.id === id);
   if (!s) return;
-  editingId     = id;
-  selectedIcon  = s.icon;
-  selectedColor = s.color;
+  editingId = id; selectedIcon = s.icon; selectedColor = s.color;
   document.getElementById('modalTitle').textContent = '✏️ 사이트 편집';
   document.getElementById('btnSave').textContent    = '수정하기';
   document.getElementById('inputName').value = s.name;
@@ -526,11 +411,10 @@ function saveSite() {
 
   if (editingId !== null) {
     sites = sites.map(s => s.id === editingId
-      ? { ...s, name, url, icon: selectedIcon, color: selectedColor }
-      : s);
+      ? {...s, name, url, icon:selectedIcon, color:selectedColor} : s);
     showToast('✅ 수정되었습니다!');
   } else {
-    sites.push({ id: Date.now(), name, url, icon: selectedIcon, color: selectedColor });
+    sites.push({id:Date.now(), name, url, icon:selectedIcon, color:selectedColor});
     showToast('✨ 사이트가 추가되었습니다!');
   }
   save(); render(); closeModal();
@@ -538,8 +422,7 @@ function saveSite() {
 
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
@@ -547,8 +430,8 @@ document.getElementById('modalBackdrop').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-  if (e.key === 'Enter' && document.getElementById('modalBackdrop').classList.contains('open')) saveSite();
+  if (e.key==='Escape') closeModal();
+  if (e.key==='Enter' && document.getElementById('modalBackdrop').classList.contains('open')) saveSite();
 });
 
 load();
