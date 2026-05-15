@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>나의 웹사이트 모음</title>
 <link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;500;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --bg: #0a0a12; --card: #13131f; --card-hover: #1c1c2e;
@@ -45,10 +46,8 @@
   }
   .subtitle { color:var(--muted); font-size:15px; }
 
-  /* ── Grid ── */
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:18px; margin-bottom:40px; }
 
-  /* ── Card ── */
   .card {
     position:relative; background:var(--card); border:1px solid var(--border);
     border-radius:18px; padding:28px 24px 24px; cursor:pointer;
@@ -60,31 +59,22 @@
     content:''; position:absolute; top:0;left:0;right:0; height:3px;
     background:var(--c,var(--accent1)); border-radius:18px 18px 0 0; opacity:0.85;
   }
-  /* normal hover */
   .card:not(.edit-active):hover {
     background:var(--card-hover); border-color:rgba(255,255,255,0.13);
     transform:translateY(-5px) scale(1.01);
     box-shadow:0 20px 60px rgba(0,0,0,0.45),0 0 0 1px rgba(255,255,255,0.06);
   }
-  /* edit mode */
   .card.edit-active { cursor:grab; border-color:rgba(108,99,255,0.2); }
   .card.edit-active:hover { background:var(--card-hover); border-color:rgba(108,99,255,0.45); }
-
-  /* dragging states */
   .card.dragging { opacity:0.35; transform:scale(0.97); cursor:grabbing; box-shadow:none; }
   .card.drag-over {
     border-color:var(--accent1) !important;
     box-shadow:0 0 0 2px var(--accent1), 0 16px 48px rgba(108,99,255,0.4);
     transform:scale(1.03);
   }
-
-  /* drag handle shown in edit mode */
   .drag-handle {
-    position:absolute; top:50%; left:10px;
-    transform:translateY(-50%);
-    font-size:16px; color:rgba(255,255,255,0.2);
-    opacity:0; transition:opacity 0.2s;
-    pointer-events:none;
+    position:absolute; top:50%; left:10px; transform:translateY(-50%);
+    font-size:16px; color:rgba(255,255,255,0.2); opacity:0; transition:opacity 0.2s; pointer-events:none;
   }
   .card.edit-active:hover .drag-handle { opacity:1; }
 
@@ -95,7 +85,6 @@
   .card-arrow { position:absolute; top:24px;right:20px; font-size:18px; opacity:0; color:var(--muted); transform:translateX(-6px); transition:opacity 0.2s,transform 0.2s; }
   .card:not(.edit-active):hover .card-arrow { opacity:1; transform:translateX(0); }
 
-  /* edit action buttons */
   .card-btn-row { position:absolute; top:8px;right:8px; display:flex; gap:4px; z-index:6; opacity:0; transition:opacity 0.2s; }
   .card.edit-active:hover .card-btn-row { opacity:1; }
   .card-btn { border:none; border-radius:8px; width:28px;height:28px; display:flex;align-items:center;justify-content:center; cursor:pointer; font-size:13px; transition:background 0.2s,transform 0.15s; }
@@ -107,7 +96,6 @@
 
   @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-  /* ── Add button ── */
   .add-btn {
     display:flex; align-items:center; justify-content:center; gap:10px;
     width:100%; max-width:320px; margin:0 auto; padding:16px 32px;
@@ -120,7 +108,6 @@
   .add-btn:hover { transform:translateY(-2px); box-shadow:0 14px 48px rgba(108,99,255,0.6); }
   .add-btn:active { transform:scale(0.97); }
 
-  /* ── Modal ── */
   .modal-backdrop { position:fixed;inset:0; background:rgba(5,5,15,0.78); backdrop-filter:blur(8px); display:flex;align-items:center;justify-content:center; z-index:100; opacity:0; pointer-events:none; transition:opacity 0.25s; }
   .modal-backdrop.open { opacity:1; pointer-events:all; }
   .modal { background:#16162a; border:1px solid rgba(255,255,255,0.1); border-radius:24px; padding:36px 32px; width:100%; max-width:440px; margin:16px; transform:translateY(24px) scale(0.97); transition:transform 0.3s ease; box-shadow:0 32px 80px rgba(0,0,0,0.6); }
@@ -144,7 +131,6 @@
   .btn-save { flex:2; padding:13px; background:linear-gradient(135deg,var(--accent1),#8b85ff); border:none; border-radius:12px; color:#fff; font-family:'Gmarket Sans',sans-serif; font-size:14px; font-weight:500; cursor:pointer; transition:opacity 0.2s,transform 0.2s; box-shadow:0 4px 20px rgba(108,99,255,0.4); }
   .btn-save:hover { opacity:0.9; transform:translateY(-1px); }
 
-  /* ── Misc ── */
   .count-badge { text-align:center; font-size:13px; color:var(--muted); margin-bottom:24px; }
   .count-badge span { color:var(--accent3); font-weight:700; }
   .edit-info { display:none; text-align:center; font-size:13px; color:rgba(108,99,255,0.85); margin-bottom:16px; padding:8px 16px; background:rgba(108,99,255,0.08); border:1px solid rgba(108,99,255,0.2); border-radius:100px; }
@@ -155,7 +141,17 @@
   .edit-toggle:hover { background:rgba(255,255,255,0.1); }
   .edit-toggle.active { color:var(--accent2); border-color:rgba(255,100,132,0.3); }
 
-  @media(max-width:480px) { .container{padding:40px 16px 80px} .grid{grid-template-columns:1fr 1fr;gap:12px} .icon-grid{grid-template-columns:repeat(6,1fr)} }
+  /* ── 실시간 동기화 상태 ── */
+  .sync-status { position:fixed; top:20px; right:110px; z-index:50; border-radius:100px; padding:8px 14px; font-size:12px; display:flex; align-items:center; gap:6px; font-family:'Noto Sans KR',sans-serif; transition:all 0.4s; }
+  .sync-status.connected { background:rgba(67,230,181,0.1); border:1px solid rgba(67,230,181,0.3); color:var(--accent3); }
+  .sync-status.syncing   { background:rgba(255,211,110,0.1); border:1px solid rgba(255,211,110,0.3); color:#ffd36e; }
+  .sync-status.error     { background:rgba(255,101,132,0.12); border:1px solid rgba(255,101,132,0.3); color:var(--accent2); }
+  .sync-dot { width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0; }
+  .sync-status.connected .sync-dot { animation:pulse 2s ease infinite; }
+  .sync-status.syncing   .sync-dot { animation:blink 0.5s ease infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+
+  @media(max-width:480px) { .container{padding:40px 16px 80px} .grid{grid-template-columns:1fr 1fr;gap:12px} .icon-grid{grid-template-columns:repeat(6,1fr)} .sync-status{display:none} }
 </style>
 </head>
 <body>
@@ -164,6 +160,10 @@
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
 
+<div class="sync-status syncing" id="syncStatus">
+  <span class="sync-dot"></span>
+  <span id="syncText">연결 중...</span>
+</div>
 <button class="edit-toggle" id="editToggle" onclick="toggleEditMode()">✏️ 편집</button>
 
 <div class="container">
@@ -180,7 +180,6 @@
   </div>
 </div>
 
-<!-- Add / Edit Modal -->
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal">
     <h2 id="modalTitle">🌐 사이트 추가</h2>
@@ -210,14 +209,16 @@
 <div class="toast" id="toast"></div>
 
 <script>
+/* ── Supabase 설정 ── */
+const SUPABASE_URL = 'https://oeoxmfgfiegfggyhohm.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9lb3h4bWZnZmllZ2ZnZ3lob2htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDYzMjMsImV4cCI6MjA5MDEyMjMyM30.zeWdhASTQ1-170zC60ppqSeLB8XQkAea6Eg7nEUZhsg';
+const DB_KEY = 'sites_v1';
+
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const ICONS  = ['🏫','💻','🤖','📚','⌨️','🏆','🎨','🎮','📊','🔬','🌍','✨','🎯','🛠️','📱','🎵','🔮','🚀','💡','📝','🌟','🧠','📐','🎪'];
 const COLORS = ['#6c63ff','#ff6584','#43e6b5','#ffd36e','#ff8c42','#5bc8f5','#b388ff','#69f0ae','#ff5252','#40c4ff','#e040fb','#f9a825'];
-
-let sites = [];
-let selectedIcon  = ICONS[0];
-let selectedColor = COLORS[0];
-let editMode  = false;
-let editingId = null;
 
 const DEFAULT_SITES = [
   { id:1, name:'학원 홈페이지',                url:'https://www.quvia-lab.com',                        icon:'🏫', color:'#6c63ff' },
@@ -228,15 +229,83 @@ const DEFAULT_SITES = [
   { id:6, name:'AI·SW 사고력 올림피아드',       url:'https://quvia-olympiad-56.vercel.app/',            icon:'🏆', color:'#ff6584' },
 ];
 
-/* ── Storage ── */
-function load() {
-  try {
-    const saved = localStorage.getItem('launcher_sites_v3');
-    sites = saved ? JSON.parse(saved) : DEFAULT_SITES.map((s,i)=>({...s,id:Date.now()+i}));
-  } catch { sites = DEFAULT_SITES.map((s,i)=>({...s,id:Date.now()+i})); }
-  save(); render();
+let sites = [];
+let selectedIcon  = ICONS[0];
+let selectedColor = COLORS[0];
+let editMode  = false;
+let editingId = null;
+
+/* ── 동기화 상태 UI ── */
+function setSyncStatus(state, text) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  document.getElementById('syncText').textContent = text;
 }
-function save() { localStorage.setItem('launcher_sites_v3', JSON.stringify(sites)); }
+
+/* ── Supabase 저장 ── */
+async function save() {
+  setSyncStatus('syncing', '저장 중...');
+  try {
+    const { error } = await db.from('launcher_data').upsert(
+      { key: DB_KEY, data: sites, updated_at: new Date().toISOString() },
+      { onConflict: 'key' }
+    );
+    if (error) throw error;
+    setSyncStatus('connected', '클라우드 동기화됨');
+  } catch (err) {
+    console.error('저장 실패:', err);
+    setSyncStatus('error', '저장 실패 — 로컬 백업됨');
+    localStorage.setItem('launcher_backup', JSON.stringify(sites));
+  }
+}
+
+/* ── Supabase 불러오기 ── */
+async function load() {
+  setSyncStatus('syncing', '불러오는 중...');
+  try {
+    const { data, error } = await db
+      .from('launcher_data').select('data').eq('key', DB_KEY).single();
+
+    if (error && error.code !== 'PGRST116') throw error;
+
+    if (data && Array.isArray(data.data) && data.data.length > 0) {
+      sites = data.data;
+    } else {
+      // 첫 실행: 기본 사이트 저장
+      sites = DEFAULT_SITES.map((s, i) => ({ ...s, id: Date.now() + i }));
+      await save();
+    }
+    setSyncStatus('connected', '클라우드 동기화됨');
+  } catch (err) {
+    console.error('불러오기 실패:', err);
+    setSyncStatus('error', '연결 실패 — 로컬 사용 중');
+    const backup = localStorage.getItem('launcher_backup');
+    sites = backup ? JSON.parse(backup) : DEFAULT_SITES.map((s, i) => ({ ...s, id: Date.now() + i }));
+  }
+  render();
+  subscribeRealtime();
+}
+
+/* ── 실시간 구독 ── */
+function subscribeRealtime() {
+  db.channel('launcher_sync')
+    .on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'launcher_data',
+      filter: `key=eq.${DB_KEY}`
+    }, payload => {
+      const incoming = payload.new.data;
+      if (!incoming || !Array.isArray(incoming)) return;
+      if (JSON.stringify(incoming) === JSON.stringify(sites)) return;
+      sites = incoming;
+      render();
+      showToast('🔄 다른 기기에서 업데이트됨');
+    })
+    .subscribe(status => {
+      if (status === 'SUBSCRIBED') setSyncStatus('connected', '실시간 동기화 중');
+    });
+}
 
 /* ── Render ── */
 function render() {
@@ -244,24 +313,22 @@ function render() {
   document.getElementById('siteCount').textContent = sites.length;
   document.getElementById('editInfo').classList.toggle('visible', editMode);
 
-  grid.innerHTML = sites.map((s,i) => {
-    const shortUrl = s.url.replace(/^https?:\/\//,'').substring(0,34);
+  grid.innerHTML = sites.map((s, i) => {
+    const shortUrl = s.url.replace(/^https?:\/\//, '').substring(0, 34);
     const btnRow = editMode ? `
       <div class="card-btn-row">
         <button class="card-btn card-btn-edit"   onclick="openEditModal(event,${s.id})" title="편집">✏️</button>
         <button class="card-btn card-btn-delete" onclick="deleteSite(event,${s.id})"   title="삭제">✕</button>
       </div>
       <div class="drag-handle">⠿⠿</div>` : '';
-
     const href   = editMode ? 'javascript:void(0)' : s.url;
     const target = editMode ? '' : 'target="_blank" rel="noopener"';
-
     return `
-      <a class="card${editMode?' edit-active':''}"
+      <a class="card${editMode ? ' edit-active' : ''}"
          href="${href}" ${target}
          data-id="${s.id}"
-         style="--c:${s.color};animation-delay:${i*0.06}s"
-         ${editMode ? `draggable="true"` : ''}>
+         style="--c:${s.color};animation-delay:${i * 0.06}s"
+         ${editMode ? 'draggable="true"' : ''}>
         ${btnRow}
         <div class="card-icon">${s.icon}</div>
         <div class="card-name">${s.name}</div>
@@ -284,8 +351,7 @@ function render() {
 let dragSrcId = null;
 
 function initDrag() {
-  const cards = document.querySelectorAll('.card.edit-active');
-  cards.forEach(card => {
+  document.querySelectorAll('.card.edit-active').forEach(card => {
     card.addEventListener('dragstart', onDragStart);
     card.addEventListener('dragend',   onDragEnd);
     card.addEventListener('dragover',  onDragOver);
@@ -293,40 +359,29 @@ function initDrag() {
     card.addEventListener('drop',      onDrop);
   });
 }
-
 function onDragStart(e) {
   dragSrcId = parseInt(this.dataset.id);
   this.classList.add('dragging');
   e.dataTransfer.effectAllowed = 'move';
 }
-
-function onDragEnd(e) {
+function onDragEnd() {
   this.classList.remove('dragging');
   document.querySelectorAll('.card').forEach(c => c.classList.remove('drag-over'));
 }
-
 function onDragOver(e) {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'move';
-  const targetId = parseInt(this.dataset.id);
-  if (targetId !== dragSrcId) this.classList.add('drag-over');
+  if (parseInt(this.dataset.id) !== dragSrcId) this.classList.add('drag-over');
 }
-
-function onDragLeave(e) {
-  this.classList.remove('drag-over');
-}
-
+function onDragLeave() { this.classList.remove('drag-over'); }
 function onDrop(e) {
   e.preventDefault(); e.stopPropagation();
   this.classList.remove('drag-over');
   const targetId = parseInt(this.dataset.id);
   if (targetId === dragSrcId) return;
-
   const srcIdx = sites.findIndex(s => s.id === dragSrcId);
   const tgtIdx = sites.findIndex(s => s.id === targetId);
   if (srcIdx === -1 || tgtIdx === -1) return;
-
-  // reorder
   const [moved] = sites.splice(srcIdx, 1);
   sites.splice(tgtIdx, 0, moved);
   save(); render();
@@ -340,7 +395,6 @@ function deleteSite(e, id) {
   save(); render();
   showToast('🗑️ 삭제되었습니다');
 }
-
 function toggleEditMode() {
   editMode = !editMode;
   const btn = document.getElementById('editToggle');
@@ -349,15 +403,15 @@ function toggleEditMode() {
   render();
 }
 
-/* ── Modal helpers ── */
+/* ── Modal ── */
 function buildIconGrid() {
   document.getElementById('iconGrid').innerHTML = ICONS.map(ic =>
-    `<div class="icon-opt${ic===selectedIcon?' selected':''}" onclick="selectIcon('${ic}',this)">${ic}</div>`
+    `<div class="icon-opt${ic === selectedIcon ? ' selected' : ''}" onclick="selectIcon('${ic}',this)">${ic}</div>`
   ).join('');
 }
 function buildColorRow() {
   document.getElementById('colorRow').innerHTML = COLORS.map(c =>
-    `<div class="color-opt${c===selectedColor?' selected':''}" style="background:${c}" onclick="selectColor('${c}',this)"></div>`
+    `<div class="color-opt${c === selectedColor ? ' selected' : ''}" style="background:${c}" onclick="selectColor('${c}',this)"></div>`
   ).join('');
 }
 function selectIcon(ic, el) {
@@ -370,7 +424,6 @@ function selectColor(c, el) {
   document.querySelectorAll('.color-opt').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
 }
-
 function openModal() {
   editingId = null;
   selectedIcon = ICONS[0]; selectedColor = COLORS[0];
@@ -382,7 +435,6 @@ function openModal() {
   document.getElementById('modalBackdrop').classList.add('open');
   setTimeout(() => document.getElementById('inputName').focus(), 200);
 }
-
 function openEditModal(e, id) {
   e.preventDefault(); e.stopPropagation();
   const s = sites.find(x => x.id === id);
@@ -396,30 +448,26 @@ function openEditModal(e, id) {
   document.getElementById('modalBackdrop').classList.add('open');
   setTimeout(() => document.getElementById('inputName').focus(), 200);
 }
-
 function closeModal() {
   document.getElementById('modalBackdrop').classList.remove('open');
   editingId = null;
 }
-
 function saveSite() {
   const name = document.getElementById('inputName').value.trim();
   let   url  = document.getElementById('inputUrl').value.trim();
   if (!name) { showToast('이름을 입력해주세요!'); return; }
   if (!url)  { showToast('URL을 입력해주세요!');  return; }
   if (!url.startsWith('http')) url = 'https://' + url;
-
   if (editingId !== null) {
     sites = sites.map(s => s.id === editingId
-      ? {...s, name, url, icon:selectedIcon, color:selectedColor} : s);
+      ? { ...s, name, url, icon: selectedIcon, color: selectedColor } : s);
     showToast('✅ 수정되었습니다!');
   } else {
-    sites.push({id:Date.now(), name, url, icon:selectedIcon, color:selectedColor});
+    sites.push({ id: Date.now(), name, url, icon: selectedIcon, color: selectedColor });
     showToast('✨ 사이트가 추가되었습니다!');
   }
   save(); render(); closeModal();
 }
-
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
@@ -430,8 +478,8 @@ document.getElementById('modalBackdrop').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 document.addEventListener('keydown', e => {
-  if (e.key==='Escape') closeModal();
-  if (e.key==='Enter' && document.getElementById('modalBackdrop').classList.contains('open')) saveSite();
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Enter' && document.getElementById('modalBackdrop').classList.contains('open')) saveSite();
 });
 
 load();
