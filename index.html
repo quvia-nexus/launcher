@@ -7,12 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;500;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --bg:#0a0a12; --card:#13131f; --card-hover:#1c1c2e;
-  --border:rgba(255,255,255,0.07);
-  --accent1:#6c63ff; --accent2:#ff6584; --accent3:#43e6b5;
-  --text:#e8e8f0; --muted:#7a7a9a;
-}
+:root{--bg:#0a0a12;--card:#13131f;--card-hover:#1c1c2e;--border:rgba(255,255,255,0.07);--accent1:#6c63ff;--accent2:#ff6584;--accent3:#43e6b5;--text:#e8e8f0;--muted:#7a7a9a}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(108,99,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(108,99,255,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
@@ -21,86 +16,100 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .orb2{width:320px;height:320px;background:var(--accent2);bottom:-80px;right:-60px;animation-delay:-5s}
 .orb3{width:240px;height:240px;background:var(--accent3);top:40%;left:55%;animation-delay:-9s}
 @keyframes floatOrb{0%,100%{transform:translate(0,0)}33%{transform:translate(30px,-30px)}66%{transform:translate(-20px,20px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
 
-/* ── 동기화 상태 ── */
+/* ── Sync ── */
 .sync-status{position:fixed;top:16px;right:16px;z-index:100;display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);background:rgba(19,19,31,0.85);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:100px;padding:6px 14px;transition:all 0.3s}
 .sync-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background 0.3s}
 .sync-status.syncing .sync-dot{background:#ffd36e;animation:pulse 1s ease infinite}
 .sync-status.connected .sync-dot{background:var(--accent3)}
 .sync-status.error .sync-dot{background:var(--accent2)}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
 
-/* ── 컨테이너 ── */
+/* ── Layout ── */
 .container{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:60px 24px 100px}
-
-/* ── 헤더 ── */
 header{text-align:center;margin-bottom:48px;animation:fadeDown 0.7s ease both}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)}}
 .logo-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(108,99,255,0.15);border:1px solid rgba(108,99,255,0.35);border-radius:100px;padding:6px 18px;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--accent1);text-transform:uppercase;margin-bottom:20px}
 .logo-badge .dot{width:7px;height:7px;background:var(--accent1);border-radius:50%;animation:pulse 2s ease infinite}
 h1{font-family:'Gmarket Sans',sans-serif;font-size:clamp(28px,4vw,46px);font-weight:700;background:linear-gradient(135deg,#fff 30%,var(--accent1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:12px}
 .subtitle{color:var(--muted);font-size:14px}
 
-/* ══════════════════════════════
-   홈 화면 — 폴더 그리드
-══════════════════════════════ */
+/* ══ HOME ══ */
 .home-view{animation:fadeUp 0.5s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
+.home-toolbar{display:flex;justify-content:flex-end;margin-bottom:16px}
+.toolbar-btn{display:flex;align-items:center;gap:6px;background:rgba(108,99,255,0.12);border:1px solid rgba(108,99,255,0.25);border-radius:100px;padding:7px 16px;font-size:13px;color:var(--accent1);cursor:pointer;transition:all 0.2s}
+.toolbar-btn:hover,.toolbar-btn.active{background:rgba(108,99,255,0.28);border-color:var(--accent1)}
 .folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
-
-.folder-card{
-  background:var(--card);border:1px solid var(--border);border-radius:22px;
-  padding:32px 24px 28px;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:14px;
-  transition:transform 0.22s,background 0.22s,border-color 0.22s,box-shadow 0.22s;
-  animation:fadeUp 0.5s ease both;position:relative;overflow:hidden;
-  text-align:center;
-}
+.folder-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:32px 24px 28px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:14px;transition:transform 0.22s,background 0.22s,border-color 0.22s,box-shadow 0.22s;animation:fadeUp 0.5s ease both;position:relative;overflow:hidden;text-align:center}
 .folder-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--fc,var(--accent1));border-radius:22px 22px 0 0;opacity:0.9}
-.folder-card:hover{background:var(--card-hover);border-color:rgba(255,255,255,0.14);transform:translateY(-6px) scale(1.02);box-shadow:0 24px 60px rgba(0,0,0,0.5)}
+.folder-card:not(.edit-home):hover{background:var(--card-hover);border-color:rgba(255,255,255,0.14);transform:translateY(-6px) scale(1.02);box-shadow:0 24px 60px rgba(0,0,0,0.5)}
+.folder-card.edit-home{cursor:default}
+.folder-card.edit-home:hover{background:var(--card-hover);border-color:rgba(108,99,255,0.4)}
 .folder-emoji{font-size:44px;line-height:1}
 .folder-name{font-family:'Gmarket Sans',sans-serif;font-size:18px;font-weight:500;color:#fff}
 .folder-count{font-size:12px;color:var(--muted);background:rgba(255,255,255,0.06);border-radius:100px;padding:3px 12px}
+.folder-lock-badge{position:absolute;top:12px;right:12px;font-size:15px;opacity:0.55}
+.h-btn-row{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:6;opacity:0;transition:opacity 0.2s}
+.folder-card.edit-home:hover .h-btn-row{opacity:1}
+.h-btn{border:none;border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;transition:all 0.15s}
+.h-btn:hover{transform:scale(1.15)}
+.h-btn-edit{background:rgba(108,99,255,0.22);color:#a89fff}
+.h-btn-edit:hover{background:rgba(108,99,255,0.45)}
+.h-btn-del{background:rgba(255,100,100,0.18);color:#ff6b6b}
+.h-btn-del:hover{background:rgba(255,100,100,0.38)}
+.add-folder-card{background:rgba(108,99,255,0.05);border:1.5px dashed rgba(108,99,255,0.3);border-radius:22px;padding:32px 24px 28px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:14px;transition:all 0.2s;text-align:center}
+.add-folder-card:hover{background:rgba(108,99,255,0.12);border-color:rgba(108,99,255,0.6)}
+.add-folder-icon{font-size:36px;opacity:0.6;color:var(--accent1)}
+.add-folder-label{font-size:14px;color:var(--accent1);opacity:0.7}
 
-/* ══════════════════════════════
-   폴더 내부 화면
-══════════════════════════════ */
+/* ══ FOLDER VIEW ══ */
 .folder-view{display:none;animation:fadeUp 0.45s ease both}
 .folder-view.active{display:block}
-
-.folder-topbar{display:flex;align-items:center;gap:14px;margin-bottom:32px}
-.back-btn{
-  display:flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,0.07);border:1px solid var(--border);
-  border-radius:100px;padding:7px 16px;font-size:13px;color:var(--muted);
-  cursor:pointer;transition:all 0.2s;white-space:nowrap;
-}
+.folder-topbar{display:flex;align-items:center;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+.back-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:100px;padding:7px 16px;font-size:13px;color:var(--muted);cursor:pointer;transition:all 0.2s;white-space:nowrap}
 .back-btn:hover{background:rgba(255,255,255,0.12);color:var(--text)}
 .folder-topbar-title{font-family:'Gmarket Sans',sans-serif;font-size:22px;font-weight:700;color:#fff;display:flex;align-items:center;gap:10px}
 .folder-topbar-badge{font-size:12px;color:var(--muted);background:rgba(255,255,255,0.07);border-radius:100px;padding:3px 12px;font-family:'Noto Sans KR',sans-serif}
-
-.edit-toggle{
-  margin-left:auto;display:flex;align-items:center;gap:6px;
-  background:rgba(108,99,255,0.15);border:1px solid rgba(108,99,255,0.3);
-  border-radius:100px;padding:7px 18px;font-size:13px;color:var(--accent1);
-  cursor:pointer;transition:all 0.2s;
-}
+.edit-toggle{margin-left:auto;display:flex;align-items:center;gap:6px;background:rgba(108,99,255,0.15);border:1px solid rgba(108,99,255,0.3);border-radius:100px;padding:7px 18px;font-size:13px;color:var(--accent1);cursor:pointer;transition:all 0.2s;white-space:nowrap}
 .edit-toggle:hover,.edit-toggle.active{background:rgba(108,99,255,0.3);border-color:var(--accent1)}
-
-.edit-info{font-size:12px;color:var(--muted);text-align:center;margin-bottom:12px;display:none}
+.edit-info{font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px;display:none}
 .edit-info.visible{display:block}
 
-/* ── 사이트 카드 그리드 ── */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:32px}
+/* Sub-folder bar when inside sf */
+.sf-nav-bar{display:none;align-items:center;gap:10px;margin-bottom:20px;padding:10px 18px;background:rgba(67,230,181,0.06);border:1px solid rgba(67,230,181,0.18);border-radius:12px}
+.sf-nav-bar.show{display:flex}
+.sf-back-btn{background:none;border:none;color:var(--accent3);font-size:13px;cursor:pointer;padding:4px 8px;border-radius:8px;transition:background 0.2s;white-space:nowrap}
+.sf-back-btn:hover{background:rgba(67,230,181,0.1)}
+.sf-nav-title{font-family:'Gmarket Sans',sans-serif;font-size:15px;color:#fff}
 
-.card{
-  position:relative;background:var(--card);border:1px solid var(--border);
-  border-radius:18px;padding:26px 22px 22px;cursor:pointer;
-  text-decoration:none;display:flex;flex-direction:column;gap:10px;
-  transition:transform 0.22s,background 0.22s,border-color 0.22s,box-shadow 0.22s,opacity 0.18s;
-  animation:fadeUp 0.5s ease both;overflow:hidden;user-select:none;
-}
+/* Sub-folders section */
+.sf-section{margin-bottom:24px}
+.section-label{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+.sf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.sf-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px 14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all 0.2s;text-align:center;position:relative;overflow:hidden}
+.sf-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;background:var(--sfc,#6c63ff);border-radius:16px 16px 0 0;opacity:0.85}
+.sf-card:not(.edit-sf):hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.15);transform:translateY(-3px)}
+.sf-card.edit-sf:hover{border-color:rgba(108,99,255,0.4)}
+.sf-emoji{font-size:26px}
+.sf-name{font-size:14px;font-weight:500;color:#fff;font-family:'Gmarket Sans',sans-serif}
+.sf-count{font-size:11px;color:var(--muted)}
+.sf-btn-row{position:absolute;top:6px;right:6px;display:flex;gap:3px;opacity:0;transition:opacity 0.2s;z-index:5}
+.sf-card.edit-sf:hover .sf-btn-row{opacity:1}
+.sf-btn{border:none;border-radius:7px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;transition:all 0.15s}
+.sf-btn:hover{transform:scale(1.15)}
+.sf-btn-edit{background:rgba(108,99,255,0.25);color:#a89fff}
+.sf-btn-edit:hover{background:rgba(108,99,255,0.5)}
+.sf-btn-del{background:rgba(255,100,100,0.2);color:#ff6b6b}
+.sf-btn-del:hover{background:rgba(255,100,100,0.4)}
+.add-sf-card{background:rgba(67,230,181,0.04);border:1.5px dashed rgba(67,230,181,0.22);border-radius:16px;padding:18px 14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all 0.2s;text-align:center}
+.add-sf-card:hover{background:rgba(67,230,181,0.1);border-color:rgba(67,230,181,0.5)}
+
+/* Site cards */
+.sites-section{margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:20px}
+.card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px 22px 22px;cursor:pointer;text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:transform 0.22s,background 0.22s,border-color 0.22s,box-shadow 0.22s,opacity 0.18s;animation:fadeUp 0.5s ease both;overflow:hidden;user-select:none}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--accent1));border-radius:18px 18px 0 0;opacity:0.85}
 .card:not(.edit-active):hover{background:var(--card-hover);border-color:rgba(255,255,255,0.13);transform:translateY(-5px) scale(1.01);box-shadow:0 20px 60px rgba(0,0,0,0.45)}
 .card.edit-active{cursor:grab;border-color:rgba(108,99,255,0.2)}
@@ -125,86 +134,90 @@ h1{font-family:'Gmarket Sans',sans-serif;font-size:clamp(28px,4vw,46px);font-wei
 .card-btn-move:hover{background:rgba(67,230,181,0.38)}
 .card-btn-delete{background:rgba(255,100,100,0.18);color:#ff6b6b}
 .card-btn-delete:hover{background:rgba(255,100,100,0.38)}
-
-/* ── 폴더 이동 모달 ── */
-.move-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
-.move-backdrop.open{opacity:1;pointer-events:auto}
-.move-modal{background:#16162a;border:1px solid rgba(67,230,181,0.25);border-radius:22px;padding:28px;width:90%;max-width:360px;transform:scale(0.92) translateY(16px);transition:transform 0.22s}
-.move-backdrop.open .move-modal{transform:scale(1) translateY(0)}
-.move-modal-title{font-family:'Gmarket Sans',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:6px}
-.move-modal-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
-.move-modal-sub strong{color:var(--accent3)}
-.folder-pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.folder-pick-btn{
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  padding:16px 10px;
-  background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.08);
-  border-radius:14px;cursor:pointer;
-  transition:all 0.18s;
-}
-.folder-pick-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);transform:translateY(-2px)}
-.folder-pick-btn.current{opacity:0.35;cursor:not-allowed;pointer-events:none}
-.folder-pick-btn .fp-emoji{font-size:26px}
-.folder-pick-btn .fp-name{font-size:13px;font-weight:500;color:#fff}
-.move-cancel{width:100%;margin-top:14px;padding:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:var(--muted);font-size:13px;cursor:pointer;transition:all 0.2s}
-.move-cancel:hover{background:rgba(255,255,255,0.1)}
-
-/* ── 사이트 추가 버튼 ── */
-.add-btn{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  width:100%;padding:18px;
-  background:rgba(108,99,255,0.07);border:1.5px dashed rgba(108,99,255,0.35);
-  border-radius:18px;color:var(--accent1);font-size:14px;font-weight:500;
-  cursor:pointer;transition:all 0.2s;
-}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:rgba(108,99,255,0.07);border:1.5px dashed rgba(108,99,255,0.35);border-radius:18px;color:var(--accent1);font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s}
 .add-btn:hover{background:rgba(108,99,255,0.14);border-color:rgba(108,99,255,0.6)}
-.add-btn-icon{font-size:22px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);grid-column:1/-1}
+.empty-state .ei{font-size:48px;margin-bottom:12px}
+.empty-state p{font-size:14px;line-height:1.7}
 
-/* ══════════════════════════════
-   모달
-══════════════════════════════ */
+/* ══ PASSWORD MODAL ══ */
+.pw-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(8px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.pw-backdrop.open{opacity:1;pointer-events:auto}
+.pw-modal{background:#16162a;border:1px solid rgba(255,101,132,0.3);border-radius:24px;padding:36px 32px;width:90%;max-width:380px;transform:scale(0.93) translateY(20px);transition:transform 0.25s;text-align:center}
+.pw-backdrop.open .pw-modal{transform:scale(1) translateY(0)}
+.pw-lock{font-size:52px;margin-bottom:14px}
+.pw-title{font-family:'Gmarket Sans',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:6px}
+.pw-sub{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+.pw-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:13px 16px;color:#fff;font-size:16px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border-color 0.2s;text-align:center;letter-spacing:3px;margin-bottom:10px}
+.pw-input:focus{border-color:var(--accent2)}
+.pw-input.shake{animation:shake 0.38s ease}
+.pw-error{font-size:12px;color:var(--accent2);min-height:16px;margin-bottom:14px}
+.pw-row{display:flex;gap:10px;margin-bottom:14px}
+.pw-cancel{flex:1;padding:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--muted);font-size:14px;cursor:pointer;transition:all 0.2s}
+.pw-cancel:hover{background:rgba(255,255,255,0.1)}
+.pw-confirm{flex:2;padding:12px;background:var(--accent2);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.pw-confirm:hover{background:#ff7a9a;transform:translateY(-1px)}
+.pw-forgot{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;transition:color 0.2s;font-family:'Noto Sans KR',sans-serif}
+.pw-forgot:hover{color:var(--text)}
+
+/* ══ GENERIC MODAL ══ */
 .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s}
 .modal-backdrop.open{opacity:1;pointer-events:auto}
-.modal{background:#16162a;border:1px solid rgba(108,99,255,0.25);border-radius:22px;padding:32px;width:90%;max-width:460px;transform:scale(0.92) translateY(20px);transition:transform 0.25s;max-height:90vh;overflow-y:auto}
+.modal{background:#16162a;border:1px solid rgba(108,99,255,0.25);border-radius:22px;padding:32px;width:90%;max-width:460px;transform:scale(0.93) translateY(20px);transition:transform 0.25s;max-height:90vh;overflow-y:auto}
 .modal-backdrop.open .modal{transform:scale(1) translateY(0)}
 .modal-title{font-family:'Gmarket Sans',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:24px}
 .form-group{margin-bottom:18px}
 .form-group label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px;letter-spacing:0.5px}
-.form-group input{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border-color 0.2s}
+.form-group input[type=text],.form-group input[type=url],.form-group input[type=password]{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border-color 0.2s}
 .form-group input:focus{border-color:var(--accent1)}
 .form-group input::placeholder{color:rgba(255,255,255,0.2)}
-.icon-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.icon-opt{width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:20px;border-radius:10px;cursor:pointer;background:rgba(255,255,255,0.05);border:1.5px solid transparent;transition:all 0.15s}
+.icon-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;max-height:140px;overflow-y:auto}
+.icon-opt{width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:20px;border-radius:10px;cursor:pointer;background:rgba(255,255,255,0.05);border:1.5px solid transparent;transition:all 0.15s;flex-shrink:0}
 .icon-opt:hover{background:rgba(255,255,255,0.1)}
 .icon-opt.selected{border-color:var(--accent1);background:rgba(108,99,255,0.2)}
 .color-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.color-opt{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:all 0.15s;transform:scale(1)}
+.color-opt{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:all 0.15s}
 .color-opt:hover{transform:scale(1.15)}
 .color-opt.selected{border-color:#fff;transform:scale(1.2)}
+.lock-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(255,101,132,0.07);border:1px solid rgba(255,101,132,0.18);border-radius:10px}
+.lock-toggle-label{font-size:13px;color:var(--text)}
+.toggle-sw{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0}
+.toggle-sw input{opacity:0;width:0;height:0}
+.toggle-sl{position:absolute;inset:0;background:rgba(255,255,255,0.15);border-radius:100px;transition:0.3s}
+.toggle-sl:before{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:0.3s}
+.toggle-sw input:checked + .toggle-sl{background:var(--accent2)}
+.toggle-sw input:checked + .toggle-sl:before{transform:translateX(20px)}
 .modal-actions{display:flex;gap:10px;margin-top:24px}
 .btn-cancel{flex:1;padding:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--muted);font-size:14px;cursor:pointer;transition:all 0.2s}
 .btn-cancel:hover{background:rgba(255,255,255,0.1)}
 .btn-save{flex:2;padding:12px;background:var(--accent1);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all 0.2s}
 .btn-save:hover{background:#7c74ff;transform:translateY(-1px)}
 
-/* ── 토스트 ── */
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e35;border:1px solid rgba(108,99,255,0.3);border-radius:100px;padding:10px 22px;font-size:13px;z-index:300;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap}
+/* Move modal */
+.move-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.move-backdrop.open{opacity:1;pointer-events:auto}
+.move-modal{background:#16162a;border:1px solid rgba(67,230,181,0.25);border-radius:22px;padding:28px;width:90%;max-width:420px;transform:scale(0.92) translateY(16px);transition:transform 0.22s;max-height:80vh;overflow-y:auto}
+.move-backdrop.open .move-modal{transform:scale(1) translateY(0)}
+.move-title{font-family:'Gmarket Sans',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:6px}
+.move-sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.move-section-lbl{font-size:11px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 8px}
+.move-section-lbl:first-of-type{margin-top:0}
+.move-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.move-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;cursor:pointer;transition:all 0.18s}
+.move-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);transform:translateY(-2px)}
+.move-btn.cur{opacity:0.3;cursor:not-allowed;pointer-events:none}
+.move-btn .me{font-size:22px}
+.move-btn .mn{font-size:12px;font-weight:500;color:#fff}
+.move-cancel-btn{width:100%;margin-top:14px;padding:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:var(--muted);font-size:13px;cursor:pointer;transition:all 0.2s}
+.move-cancel-btn:hover{background:rgba(255,255,255,0.1)}
+
+/* Toast */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e35;border:1px solid rgba(108,99,255,0.3);border-radius:100px;padding:10px 22px;font-size:13px;z-index:600;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── 빈 상태 ── */
-.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
-.empty-state .empty-icon{font-size:48px;margin-bottom:12px}
-.empty-state p{font-size:14px;line-height:1.7}
-
-/* 작업중 폴더 느낌 */
-.folder-wip{opacity:0.75}
-.folder-wip .folder-name::after{content:' 🚧';font-size:14px}
 </style>
 </head>
 <body>
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-<div class="orb orb3"></div>
+<div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
 <div class="sync-status syncing" id="syncStatus">
   <span class="sync-dot"></span><span id="syncText">연결 중...</span>
 </div>
@@ -216,537 +229,740 @@ h1{font-family:'Gmarket Sans',sans-serif;font-size:clamp(28px,4vw,46px);font-wei
     <p class="subtitle">폴더를 선택해서 사이트를 관리하세요</p>
   </header>
 
-  <!-- ════════════════════════
-       홈 — 폴더 목록
-  ════════════════════════ -->
+  <!-- HOME -->
   <div class="home-view" id="homeView">
-    <div class="folder-grid" id="folderGrid">
-      <!-- JS로 렌더링 -->
+    <div class="home-toolbar">
+      <button class="toolbar-btn" id="homeEditBtn" onclick="toggleHomeEdit()">✏️ 폴더 편집</button>
     </div>
+    <div class="folder-grid" id="folderGrid"></div>
   </div>
 
-  <!-- ════════════════════════
-       폴더 내부 뷰
-  ════════════════════════ -->
+  <!-- FOLDER -->
   <div class="folder-view" id="folderView">
     <div class="folder-topbar">
       <button class="back-btn" onclick="goHome()">← 홈으로</button>
-      <div class="folder-topbar-title" id="folderTitle">
-        <span id="folderEmoji"></span>
-        <span id="folderName"></span>
+      <div class="folder-topbar-title">
+        <span id="folderEmoji"></span><span id="folderName"></span>
         <span class="folder-topbar-badge" id="folderBadge">0개</span>
       </div>
       <button class="edit-toggle" id="editToggle" onclick="toggleEditMode()">✏️ 편집</button>
     </div>
-    <div class="edit-info" id="editInfo">⠿ 드래그로 순서 변경 · ✏️ 편집 · 📂 폴더 이동 · ✕ 삭제</div>
-    <div class="grid" id="grid"></div>
-    <button class="add-btn" onclick="openModal()">
-      <span class="add-btn-icon">＋</span> 이 폴더에 사이트 추가
-    </button>
+    <div class="edit-info" id="editInfo">⠿ 드래그로 순서 변경 · ✏️편집 · 📂이동 · ✕삭제</div>
+    <div class="sf-nav-bar" id="sfNavBar">
+      <button class="sf-back-btn" onclick="closeSfView()">← 분류 목록으로</button>
+      <span class="sf-nav-title" id="sfNavTitle"></span>
+    </div>
+    <div id="sfSection">
+      <div class="section-label" id="sfLabel" style="display:none">📁 분류 폴더</div>
+      <div class="sf-grid" id="sfGrid"></div>
+    </div>
+    <div id="sitesSection">
+      <div class="section-label" id="sitesLabel" style="display:none">🔗 사이트</div>
+      <div class="grid" id="grid"></div>
+    </div>
+    <button class="add-btn" id="addSiteBtn" onclick="openSiteModal()">＋ 이 폴더에 사이트 추가</button>
   </div>
 </div>
 
-<!-- ════════════════════════
-     사이트 추가/편집 모달
-════════════════════════ -->
-<div class="modal-backdrop" id="modalBackdrop">
+<!-- PASSWORD MODAL -->
+<div class="pw-backdrop" id="pwBackdrop">
+  <div class="pw-modal">
+    <div class="pw-lock">🔐</div>
+    <div class="pw-title" id="pwTitle">비밀번호 확인</div>
+    <div class="pw-sub">이 폴더는 비밀번호로 보호되어 있어요</div>
+    <input class="pw-input" id="pwInput" type="password" placeholder="비밀번호 입력" maxlength="30">
+    <div class="pw-error" id="pwError"></div>
+    <div class="pw-row">
+      <button class="pw-cancel" onclick="closePwModal()">취소</button>
+      <button class="pw-confirm" onclick="confirmPw()">확인</button>
+    </div>
+    <button class="pw-forgot" onclick="forgotPw()">🔑 비밀번호를 잊어버렸어요</button>
+  </div>
+</div>
+
+<!-- FOLDER MODAL -->
+<div class="modal-backdrop" id="folderModalBD">
   <div class="modal">
-    <div class="modal-title" id="modalTitle">🌐 사이트 추가</div>
+    <div class="modal-title" id="folderModalTitle">📁 새 폴더 만들기</div>
+    <div class="form-group"><label>폴더 이름</label><input id="fName" type="text" placeholder="예) 개인용" maxlength="12"></div>
+    <div class="form-group"><label>아이콘</label><div class="icon-grid" id="fIconGrid"></div></div>
+    <div class="form-group"><label>색상</label><div class="color-row" id="fColorRow"></div></div>
     <div class="form-group">
-      <label>사이트 이름</label>
-      <input id="inputName" type="text" placeholder="예) 학원 홈페이지">
-    </div>
-    <div class="form-group">
-      <label>URL</label>
-      <input id="inputUrl" type="url" placeholder="예) https://quvia-lab.com">
-    </div>
-    <div class="form-group">
-      <label>아이콘 선택</label>
-      <div class="icon-grid" id="iconGrid"></div>
-    </div>
-    <div class="form-group">
-      <label>색상 선택</label>
-      <div class="color-row" id="colorRow"></div>
+      <label>🔒 비밀번호 잠금</label>
+      <div class="lock-toggle-row">
+        <span class="lock-toggle-label">잠금 설정 (비밀번호: quvia1234!)</span>
+        <label class="toggle-sw"><input type="checkbox" id="fLockChk"><span class="toggle-sl"></span></label>
+      </div>
     </div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">취소</button>
-      <button class="btn-save" id="btnSave" onclick="saveSite()">저장하기</button>
+      <button class="btn-cancel" onclick="closeFolderModal()">취소</button>
+      <button class="btn-save" id="fBtnSave" onclick="saveFolder()">만들기</button>
     </div>
+  </div>
+</div>
+
+<!-- SUB-FOLDER MODAL -->
+<div class="modal-backdrop" id="sfModalBD">
+  <div class="modal">
+    <div class="modal-title" id="sfModalTitle">📂 분류 폴더 추가</div>
+    <div class="form-group"><label>이름</label><input id="sfName" type="text" placeholder="예) 수학반, 코딩반" maxlength="12"></div>
+    <div class="form-group"><label>아이콘</label><div class="icon-grid" id="sfIconGrid"></div></div>
+    <div class="form-group"><label>색상</label><div class="color-row" id="sfColorRow"></div></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSfModal()">취소</button>
+      <button class="btn-save" id="sfBtnSave" onclick="saveSf()">추가하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- SITE MODAL -->
+<div class="modal-backdrop" id="siteModalBD">
+  <div class="modal">
+    <div class="modal-title" id="siteModalTitle">🌐 사이트 추가</div>
+    <div class="form-group"><label>사이트 이름</label><input id="sName" type="text" placeholder="예) 학원 홈페이지"></div>
+    <div class="form-group"><label>URL</label><input id="sUrl" type="url" placeholder="https://quvia-lab.com"></div>
+    <div class="form-group"><label>아이콘</label><div class="icon-grid" id="sIconGrid"></div></div>
+    <div class="form-group"><label>색상</label><div class="color-row" id="sColorRow"></div></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSiteModal()">취소</button>
+      <button class="btn-save" id="sBtnSave" onclick="saveSite()">저장하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- MOVE MODAL -->
+<div class="move-backdrop" id="moveBD">
+  <div class="move-modal">
+    <div class="move-title">📂 이동</div>
+    <div class="move-sub" id="moveSub"></div>
+    <div id="moveContent"></div>
+    <button class="move-cancel-btn" onclick="closeMoveModal()">취소</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- ════════════════════════
-     폴더 이동 모달
-════════════════════════ -->
-<div class="move-backdrop" id="moveBackdrop">
-  <div class="move-modal">
-    <div class="move-modal-title">📂 폴더 이동</div>
-    <div class="move-modal-sub">이동할 폴더를 선택하세요<br>현재: <strong id="moveCurrentFolderName"></strong></div>
-    <div class="folder-pick-grid" id="folderPickGrid"></div>
-    <button class="move-cancel" onclick="closeMoveModal()">취소</button>
-  </div>
-</div>
-
 <script>
-/* ════════════════════════════════════════════════
-   설정
-════════════════════════════════════════════════ */
-const SUPABASE_URL = 'https://oeoxxmfgfiegfggyhohm.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9lb3h4bWZnZmllZ2ZnZ3lob2htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDYzMjMsImV4cCI6MjA5MDEyMjMyM30.zeWdhASTQ1-170zC60ppqSeLB8XQkAea6Eg7nEUZhsg';
-const DB_KEY = 'launcher_v2_folders';
+/* ════ Supabase ════ */
+const SB_URL = 'https://oeoxxmfgfiegfggyhohm.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9lb3h4bWZnZmllZ2ZnZ3lob2htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDYzMjMsImV4cCI6MjA5MDEyMjMyM30.zeWdhASTQ1-170zC60ppqSeLB8XQkAea6Eg7nEUZhsg';
+const DB_KEY = 'launcher_v3';
+const LEGACY_KEY = 'launcher_v2_folders';
+const RECOVERY_EMAIL = 'ssunny081@gmail.com';
+const DEFAULT_PW = 'quvia1234!';
 
 const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = createClient(SB_URL, SB_KEY);
 
-const ICONS  = ['🏫','💻','🤖','📚','⌨️','🏆','🎨','🎮','📊','🔬','🌍','✨','🎯','🛠️','📱','🎵','🔮','🚀','💡','📝','🌟','🧠','📐','🎪','🖥️','🧩','📡','🔑','🌐','📋'];
+const ICONS = ['🏫','💻','🤖','📚','⌨️','🏆','🎨','🎮','📊','🔬','🌍','✨','🎯','🛠️','📱','🎵','🔮','🚀','💡','📝','🌟','🧠','📐','🎪','🖥️','🧩','📡','🔑','🌐','📋','📁','📂','🗂️','🎒','📖','🎓','🖊️','🧪','🔭','🏅','🎬'];
 const COLORS = ['#6c63ff','#ff6584','#43e6b5','#ffd36e','#ff8c42','#5bc8f5','#b388ff','#69f0ae','#ff5252','#40c4ff','#e040fb','#f9a825'];
 
-/* ════════════════════════════════════════════════
-   폴더 정의 (고정 — 순서/이름 변경 가능)
-════════════════════════════════════════════════ */
-const FOLDERS = [
-  { id: 'student', name: '학생용',  emoji: '🎒', color: '#43e6b5', wip: false },
-  { id: 'teacher', name: '교사용',  emoji: '📖', color: '#6c63ff', wip: false },
-  { id: 'academy', name: '학원용',  emoji: '🏫', color: '#ffd36e', wip: false },
-  { id: 'wip',     name: '작업중',  emoji: '🚧', color: '#ff6584', wip: true  },
-];
-
-/* ════════════════════════════════════════════════
-   기본 사이트 (기존 data 마이그레이션용)
-════════════════════════════════════════════════ */
-const DEFAULT_SITES_BY_FOLDER = {
-  student: [
-    { id: Date.now()+1, name:'COS Pro 연습',               url:'https://quvia-nexus.github.io/coding-star/',    icon:'💻', color:'#5bc8f5' },
-    { id: Date.now()+2, name:'AI 동화책 만들기',           url:'https://quvia-nexus.github.io/PromptStory/',    icon:'📚', color:'#ffd36e' },
-    { id: Date.now()+3, name:'타자연습 기록',              url:'https://quvia-nexus.github.io/typing-records/', icon:'⌨️', color:'#ff8c42' },
-    { id: Date.now()+4, name:'AI·SW 사고력 올림피아드',    url:'https://quvia-olympiad-56.vercel.app/',         icon:'🏆', color:'#ff6584' },
-  ],
-  teacher: [
-    { id: Date.now()+5, name:'영상 생성형 AI 프롬프트 빌더', url:'https://quvia-nexus.github.io/promptbuilder/', icon:'🤖', color:'#43e6b5' },
-  ],
-  academy: [
-    { id: Date.now()+6, name:'학원 홈페이지', url:'https://www.quvia-lab.com', icon:'🏫', color:'#6c63ff' },
-  ],
-  wip: [],
-};
-
-/* ════════════════════════════════════════════════
-   상태
-════════════════════════════════════════════════ */
-// data: { student: [...], teacher: [...], academy: [...], wip: [...] }
-let data = { student:[], teacher:[], academy:[], wip:[] };
-let currentFolder = null;   // 현재 열린 폴더 id
+/* ════ State ════ */
+/*
+  data = {
+    _config: { folders:[{id,name,emoji,color,locked}], password:'quvia1234!' },
+    [folderId]: { __sf:[{id,name,emoji,color}], __root:[site...], [sfId]:[site...] }
+  }
+*/
+let data = {};
+let currentFolder = null;
+let currentSfId   = null;
 let editMode      = false;
-let selectedIcon  = ICONS[0];
-let selectedColor = COLORS[0];
-let editingId     = null;
+let homeEditMode  = false;
+let pendingFolder = null;
+let movingId      = null;
+let editingFid    = null; // folder being edited
+let editingSfId   = null; // sf being edited
+let editingSiteId = null; // site being edited
+let fSel = { icon: ICONS[0], color: COLORS[0] };
+let sfSel = { icon: '📂', color: COLORS[0] };
+let sSel  = { icon: ICONS[0], color: COLORS[0] };
+const unlocked = new Set();
 
-/* ════════════════════════════════════════════════
-   동기화 상태 UI
-════════════════════════════════════════════════ */
-function setSyncStatus(state, text) {
+/* ════ Sync UI ════ */
+function setSyncStatus(s, t) {
   const el = document.getElementById('syncStatus');
-  el.className = 'sync-status ' + state;
-  document.getElementById('syncText').textContent = text;
+  el.className = 'sync-status ' + s;
+  document.getElementById('syncText').textContent = t;
 }
 
-/* ════════════════════════════════════════════════
-   Supabase 저장
-════════════════════════════════════════════════ */
+/* ════ Default Data ════ */
+function defaultData() {
+  return {
+    _config: {
+      folders: [
+        {id:'student', name:'학생용',  emoji:'🎒', color:'#43e6b5', locked:false},
+        {id:'teacher', name:'교사용',  emoji:'📖', color:'#6c63ff', locked:true},
+        {id:'academy', name:'학원용',  emoji:'🏫', color:'#ffd36e', locked:true},
+        {id:'wip',     name:'작업중',  emoji:'🚧', color:'#ff6584', locked:true},
+      ],
+      password: DEFAULT_PW
+    },
+    student: { __sf:[], __root:[
+      {id:Date.now()+1, name:'COS Pro 연습',           url:'https://quvia-nexus.github.io/coding-star/',    icon:'💻', color:'#5bc8f5'},
+      {id:Date.now()+2, name:'AI 동화책 만들기',       url:'https://quvia-nexus.github.io/PromptStory/',    icon:'📚', color:'#ffd36e'},
+      {id:Date.now()+3, name:'타자연습 기록',          url:'https://quvia-nexus.github.io/typing-records/', icon:'⌨️', color:'#ff8c42'},
+      {id:Date.now()+4, name:'AI·SW 사고력 올림피아드',url:'https://quvia-olympiad-56.vercel.app/',         icon:'🏆', color:'#ff6584'},
+    ]},
+    teacher: { __sf:[], __root:[{id:Date.now()+5, name:'AI 프롬프트 빌더', url:'https://quvia-nexus.github.io/promptbuilder/', icon:'🤖', color:'#43e6b5'}]},
+    academy: { __sf:[], __root:[{id:Date.now()+6, name:'학원 홈페이지', url:'https://www.quvia-lab.com', icon:'🏫', color:'#6c63ff'}]},
+    wip:     { __sf:[], __root:[] },
+  };
+}
+
+function migrate(legacy) {
+  const d = defaultData();
+  if (Array.isArray(legacy)) { d.student.__root = legacy; return d; }
+  ['student','teacher','academy','wip'].forEach(fid => {
+    if (!legacy[fid]) return;
+    if (Array.isArray(legacy[fid])) d[fid].__root = legacy[fid];
+    else if (legacy[fid].__root) d[fid] = legacy[fid];
+  });
+  return d;
+}
+
+function ensureFolder(fid) {
+  if (!data[fid]) data[fid] = {__sf:[], __root:[]};
+  if (!data[fid].__sf) data[fid].__sf = [];
+  if (!data[fid].__root) data[fid].__root = [];
+}
+
+/* ════ Save / Load ════ */
 async function save() {
   setSyncStatus('syncing', '저장 중...');
   try {
-    const { error } = await db.from('launcher_data').upsert(
-      { key: DB_KEY, data, updated_at: new Date().toISOString() },
-      { onConflict: 'key' }
-    );
+    const {error} = await db.from('launcher_data').upsert({key:DB_KEY, data, updated_at:new Date().toISOString()}, {onConflict:'key'});
     if (error) throw error;
     setSyncStatus('connected', '클라우드 동기화됨');
-  } catch (err) {
-    console.error('저장 실패:', err);
-    setSyncStatus('error', '저장 실패 — 로컬 백업됨');
-    localStorage.setItem('quvia_launcher_v2', JSON.stringify(data));
+  } catch(err) {
+    console.error(err);
+    setSyncStatus('error', '저장 실패');
+    localStorage.setItem('quvia_v3', JSON.stringify(data));
   }
 }
 
-/* ════════════════════════════════════════════════
-   Supabase 불러오기
-════════════════════════════════════════════════ */
 async function load() {
   setSyncStatus('syncing', '불러오는 중...');
   try {
-    const { data: row, error } = await db
-      .from('launcher_data').select('data').eq('key', DB_KEY).single();
-
-    if (error && error.code !== 'PGRST116') throw error;
-
-    if (row && row.data && typeof row.data === 'object' && !Array.isArray(row.data)) {
-      // 폴더 구조 데이터 존재
-      data = row.data;
-      // 새 폴더 키 없으면 추가
-      FOLDERS.forEach(f => { if (!data[f.id]) data[f.id] = []; });
-    } else if (row && Array.isArray(row.data) && row.data.length > 0) {
-      // 기존 flat 배열 → 마이그레이션: 전부 student 폴더로
-      showToast('📦 기존 데이터를 학생용 폴더로 이전했어요');
-      data = { ...DEFAULT_SITES_BY_FOLDER };
-      data.student = [...row.data, ...data.student];
-      await save();
+    // Try v3
+    const {data:r3, error:e3} = await db.from('launcher_data').select('data').eq('key', DB_KEY).single();
+    if (!e3 && r3?.data?._config) {
+      data = r3.data;
     } else {
-      // 로컬 백업 확인
-      const backup = localStorage.getItem('quvia_launcher_v2');
-      if (backup) {
-        try { data = JSON.parse(backup); } catch(_) { data = { ...DEFAULT_SITES_BY_FOLDER }; }
+      // Try legacy
+      const {data:r2} = await db.from('launcher_data').select('data').eq('key', LEGACY_KEY).single().catch(()=>({data:null}));
+      if (r2?.data) {
+        data = migrate(r2.data);
+        await save();
+        showToast('📦 기존 데이터를 새 형식으로 이전했어요!');
       } else {
-        data = { ...DEFAULT_SITES_BY_FOLDER };
+        const bk = localStorage.getItem('quvia_v3') || localStorage.getItem('quvia_launcher_v2');
+        data = bk ? (() => { try { const p=JSON.parse(bk); return p._config?p:migrate(p); } catch(_) { return defaultData(); } })() : defaultData();
         await save();
       }
     }
+    getFolders().forEach(f => ensureFolder(f.id));
     setSyncStatus('connected', '클라우드 동기화됨');
-  } catch (err) {
-    console.error('불러오기 실패:', err);
+  } catch(err) {
+    console.error(err);
     setSyncStatus('error', '연결 실패 — 로컬 사용 중');
-    const backup = localStorage.getItem('quvia_launcher_v2');
-    data = backup ? JSON.parse(backup) : { ...DEFAULT_SITES_BY_FOLDER };
+    const bk = localStorage.getItem('quvia_v3') || localStorage.getItem('quvia_launcher_v2');
+    data = bk ? (() => { try { const p=JSON.parse(bk); return p._config?p:migrate(p); } catch(_) { return defaultData(); } })() : defaultData();
   }
   renderHome();
   subscribeRealtime();
 }
 
-/* ════════════════════════════════════════════════
-   실시간 구독
-════════════════════════════════════════════════ */
 function subscribeRealtime() {
-  db.channel('launcher_v2_sync')
-    .on('postgres_changes', {
-      event: 'UPDATE', schema: 'public',
-      table: 'launcher_data', filter: `key=eq.${DB_KEY}`
-    }, payload => {
-      const incoming = payload.new.data;
-      if (!incoming || typeof incoming !== 'object') return;
-      if (JSON.stringify(incoming) === JSON.stringify(data)) return;
-      data = incoming;
+  db.channel('launcher_v3_sync')
+    .on('postgres_changes', {event:'UPDATE', schema:'public', table:'launcher_data', filter:`key=eq.${DB_KEY}`}, payload => {
+      const inc = payload.new.data;
+      if (!inc || typeof inc !== 'object') return;
+      if (JSON.stringify(inc) === JSON.stringify(data)) return;
+      data = inc;
       if (currentFolder) renderFolder(currentFolder);
       else renderHome();
       showToast('🔄 다른 기기에서 업데이트됨');
     })
-    .subscribe(status => {
-      if (status === 'SUBSCRIBED') setSyncStatus('connected', '실시간 동기화 중');
-    });
+    .subscribe(s => { if (s==='SUBSCRIBED') setSyncStatus('connected','실시간 동기화 중'); });
 }
 
-/* ════════════════════════════════════════════════
-   홈 렌더링
-════════════════════════════════════════════════ */
+/* ════ Helpers ════ */
+function getFolders() { return data._config?.folders || []; }
+function getPw()      { return data._config?.password || DEFAULT_PW; }
+function totalCount(fid) {
+  const fd = data[fid]; if (!fd) return 0;
+  let n = (fd.__root||[]).length;
+  (fd.__sf||[]).forEach(sf => { n += (fd[sf.id]||[]).length; });
+  return n;
+}
+function curSites() {
+  if (!currentFolder) return [];
+  const fd = data[currentFolder]; if (!fd) return [];
+  return currentSfId ? (fd[currentSfId]||[]) : (fd.__root||[]);
+}
+function setCurSites(sites) {
+  if (!currentFolder) return;
+  ensureFolder(currentFolder);
+  if (currentSfId) data[currentFolder][currentSfId] = sites;
+  else data[currentFolder].__root = sites;
+}
+
+/* ════ HOME ════ */
 function renderHome() {
   document.getElementById('homeView').style.display = 'block';
   document.getElementById('folderView').classList.remove('active');
-  currentFolder = null;
-  editMode = false;
+  currentFolder = null; currentSfId = null; editMode = false;
 
-  const grid = document.getElementById('folderGrid');
-  grid.innerHTML = FOLDERS.map((f, i) => {
-    const count = (data[f.id] || []).length;
-    return `
-      <div class="folder-card${f.wip ? ' folder-wip' : ''}"
-           style="--fc:${f.color};animation-delay:${i * 0.08}s"
-           onclick="openFolder('${f.id}')">
-        <div class="folder-emoji">${f.emoji}</div>
-        <div class="folder-name">${f.name}</div>
-        <div class="folder-count">${count}개의 사이트</div>
-      </div>`;
+  const folders = getFolders();
+  const g = document.getElementById('folderGrid');
+  g.innerHTML = folders.map((f,i) => {
+    const cnt = totalCount(f.id);
+    const lock = (!homeEditMode && f.locked) ? `<span class="folder-lock-badge">🔒</span>` : '';
+    const btns = homeEditMode ? `
+      <div class="h-btn-row">
+        <button class="h-btn h-btn-edit" onclick="openFolderEditModal(event,'${f.id}')" title="편집">✏️</button>
+        <button class="h-btn h-btn-del"  onclick="deleteFolder(event,'${f.id}')"        title="삭제">✕</button>
+      </div>` : '';
+    return `<div class="folder-card${homeEditMode?' edit-home':''}" style="--fc:${f.color};animation-delay:${i*0.08}s" onclick="handleFolderClick('${f.id}')">
+      ${lock}${btns}
+      <div class="folder-emoji">${f.emoji}</div>
+      <div class="folder-name">${f.name}</div>
+      <div class="folder-count">${cnt}개의 사이트</div>
+    </div>`;
   }).join('');
+
+  if (homeEditMode) {
+    g.innerHTML += `<div class="add-folder-card" onclick="openFolderAddModal()">
+      <div class="add-folder-icon">📁</div>
+      <div class="add-folder-label">새 폴더 추가</div>
+    </div>`;
+  }
+  const btn = document.getElementById('homeEditBtn');
+  btn.textContent = homeEditMode ? '✅ 완료' : '✏️ 폴더 편집';
+  btn.classList.toggle('active', homeEditMode);
 }
 
-function goHome() {
-  editMode = false;
-  renderHome();
+function toggleHomeEdit() { homeEditMode = !homeEditMode; renderHome(); }
+
+function handleFolderClick(fid) {
+  if (homeEditMode) return;
+  const f = getFolders().find(x => x.id === fid);
+  if (!f) return;
+  if (f.locked && !unlocked.has(fid)) openPwModal(fid);
+  else openFolder(fid);
+}
+function goHome() { editMode=false; homeEditMode=false; renderHome(); }
+
+/* ════ PASSWORD ════ */
+function openPwModal(fid) {
+  pendingFolder = fid;
+  const f = getFolders().find(x => x.id === fid);
+  document.getElementById('pwTitle').textContent = `${f.emoji} ${f.name}`;
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').textContent = '';
+  document.getElementById('pwBackdrop').classList.add('open');
+  setTimeout(() => document.getElementById('pwInput').focus(), 200);
+}
+function closePwModal() { document.getElementById('pwBackdrop').classList.remove('open'); pendingFolder = null; }
+function confirmPw() {
+  const v = document.getElementById('pwInput').value;
+  if (v === getPw()) {
+    unlocked.add(pendingFolder); closePwModal(); openFolder(pendingFolder);
+  } else {
+    const inp = document.getElementById('pwInput');
+    inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake');
+    document.getElementById('pwError').textContent = '❌ 비밀번호가 틀렸습니다';
+    inp.value = ''; inp.focus();
+  }
+}
+function forgotPw() {
+  const pw = getPw();
+  const sub = encodeURIComponent('QUVIA 런처 비밀번호 안내');
+  const body = encodeURIComponent(`QUVIA 런처 현재 비밀번호: ${pw}`);
+  window.open(`mailto:${RECOVERY_EMAIL}?subject=${sub}&body=${body}`);
+  showToast(`📧 ${RECOVERY_EMAIL}로 이메일을 열었어요`);
 }
 
-/* ════════════════════════════════════════════════
-   폴더 열기
-════════════════════════════════════════════════ */
-function openFolder(folderId) {
-  currentFolder = folderId;
-  editMode = false;
+/* ════ FOLDER VIEW ════ */
+function openFolder(fid) {
+  ensureFolder(fid);
+  currentFolder = fid; currentSfId = null; editMode = false;
+  const f = getFolders().find(x => x.id === fid);
   document.getElementById('homeView').style.display = 'none';
   document.getElementById('folderView').classList.add('active');
-
-  const f = FOLDERS.find(x => x.id === folderId);
   document.getElementById('folderEmoji').textContent = f.emoji;
   document.getElementById('folderName').textContent  = f.name;
   document.getElementById('editToggle').textContent  = '✏️ 편집';
   document.getElementById('editToggle').classList.remove('active');
-
-  renderFolder(folderId);
+  document.getElementById('sfNavBar').classList.remove('show');
+  renderFolder(fid);
 }
 
-/* ════════════════════════════════════════════════
-   폴더 내부 렌더링
-════════════════════════════════════════════════ */
-function renderFolder(folderId) {
-  const sites = data[folderId] || [];
-  const f     = FOLDERS.find(x => x.id === folderId);
-
-  document.getElementById('folderBadge').textContent = `${sites.length}개`;
+function renderFolder(fid) {
+  const fd   = data[fid] || {__sf:[], __root:[]};
+  const sfs  = fd.__sf || [];
   document.getElementById('editInfo').classList.toggle('visible', editMode);
+  document.getElementById('editToggle').textContent = editMode ? '✅ 완료' : '✏️ 편집';
+  document.getElementById('editToggle').classList.toggle('active', editMode);
+  document.getElementById('folderBadge').textContent = `${totalCount(fid)}개`;
 
-  const grid = document.getElementById('grid');
+  const addBtn = document.getElementById('addSiteBtn');
 
+  if (currentSfId) {
+    // Inside sub-folder
+    const sf = sfs.find(s => s.id === currentSfId);
+    document.getElementById('sfNavBar').classList.add('show');
+    document.getElementById('sfNavTitle').textContent = sf ? `${sf.emoji} ${sf.name}` : '';
+    document.getElementById('sfLabel').style.display = 'none';
+    document.getElementById('sfGrid').innerHTML = '';
+    document.getElementById('sitesLabel').style.display = 'none';
+    addBtn.textContent = '＋ 이 분류에 사이트 추가';
+  } else {
+    document.getElementById('sfNavBar').classList.remove('show');
+    addBtn.textContent = '＋ 이 폴더에 사이트 추가';
+    const hasSf = sfs.length > 0 || editMode;
+    document.getElementById('sfLabel').style.display  = hasSf ? 'block' : 'none';
+    document.getElementById('sitesLabel').style.display = hasSf ? 'block' : 'none';
+    renderSfGrid(fid);
+  }
+  renderSites();
+}
+
+function renderSfGrid(fid) {
+  const fd  = data[fid] || {__sf:[]};
+  const sfs = fd.__sf || [];
+  const g   = document.getElementById('sfGrid');
+  let html = sfs.map(sf => {
+    const cnt = (fd[sf.id]||[]).length;
+    const btns = editMode ? `<div class="sf-btn-row">
+      <button class="sf-btn sf-btn-edit" onclick="openSfEditModal(event,'${sf.id}')" title="편집">✏️</button>
+      <button class="sf-btn sf-btn-del"  onclick="deleteSf(event,'${sf.id}')"        title="삭제">✕</button>
+    </div>` : '';
+    const click = editMode ? '' : `onclick="openSfView('${sf.id}')"`;
+    return `<div class="sf-card${editMode?' edit-sf':''}" style="--sfc:${sf.color}" ${click}>
+      ${btns}
+      <div class="sf-emoji">${sf.emoji}</div>
+      <div class="sf-name">${sf.name}</div>
+      <div class="sf-count">${cnt}개</div>
+    </div>`;
+  }).join('');
+  if (editMode) html += `<div class="add-sf-card" onclick="openSfAddModal()">
+    <div style="font-size:24px;color:var(--accent3);opacity:0.65">📂</div>
+    <div style="font-size:13px;color:var(--accent3);opacity:0.65">분류 추가</div>
+  </div>`;
+  g.innerHTML = html;
+}
+
+function renderSites() {
+  const sites = curSites();
+  const g = document.getElementById('grid');
   if (sites.length === 0 && !editMode) {
-    grid.innerHTML = `
-      <div class="empty-state" style="grid-column:1/-1">
-        <div class="empty-icon">${f.emoji}</div>
-        <p>아직 사이트가 없어요.<br>아래 버튼으로 첫 번째 사이트를 추가해보세요!</p>
-      </div>`;
+    g.innerHTML = `<div class="empty-state"><div class="ei">🔗</div><p>아직 사이트가 없어요.<br>아래 버튼으로 추가해보세요!</p></div>`;
     return;
   }
-
-  grid.innerHTML = sites.map((s, i) => {
-    const shortUrl = s.url.replace(/^https?:\/\//, '').substring(0, 36);
-    const btnRow = editMode ? `
-      <div class="card-btn-row">
-        <button class="card-btn card-btn-edit"   onclick="openEditModal(event,${s.id})" title="편집">✏️</button>
-        <button class="card-btn card-btn-move"   onclick="openMoveModal(event,${s.id})" title="폴더 이동">📂</button>
-        <button class="card-btn card-btn-delete" onclick="deleteSite(event,${s.id})"   title="삭제">✕</button>
-      </div>
-      <div class="drag-handle">⠿⠿</div>` : '';
+  g.innerHTML = sites.map((s,i) => {
+    const short = s.url.replace(/^https?:\/\//,'').substring(0,36);
+    const btns = editMode ? `<div class="card-btn-row">
+      <button class="card-btn card-btn-edit"   onclick="openSiteEditModal(event,${s.id})" title="편집">✏️</button>
+      <button class="card-btn card-btn-move"   onclick="openMoveModal(event,${s.id})"     title="이동">📂</button>
+      <button class="card-btn card-btn-delete" onclick="deleteSite(event,${s.id})"        title="삭제">✕</button>
+    </div><div class="drag-handle">⠿⠿</div>` : '';
     const href   = editMode ? 'javascript:void(0)' : s.url;
     const target = editMode ? '' : 'target="_blank" rel="noopener"';
-    return `
-      <a class="card${editMode ? ' edit-active' : ''}"
-         href="${href}" ${target}
-         data-id="${s.id}"
-         style="--c:${s.color};animation-delay:${i * 0.05}s"
-         ${editMode ? 'draggable="true"' : ''}>
-        ${btnRow}
-        <div class="card-icon">${s.icon}</div>
-        <div class="card-name">${s.name}</div>
-        <div class="card-url">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-            <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-          </svg>
-          ${shortUrl}
-        </div>
-        ${editMode ? '' : '<span class="card-arrow">→</span>'}
-      </a>`;
+    return `<a class="card${editMode?' edit-active':''}" href="${href}" ${target} data-id="${s.id}" style="--c:${s.color};animation-delay:${i*0.05}s" ${editMode?'draggable="true"':''}>
+      ${btns}
+      <div class="card-icon">${s.icon}</div>
+      <div class="card-name">${s.name}</div>
+      <div class="card-url">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+          <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>${short}
+      </div>
+      ${editMode?'':`<span class="card-arrow">→</span>`}
+    </a>`;
   }).join('');
-
   if (editMode) initDrag();
 }
 
-/* ════════════════════════════════════════════════
-   편집 모드
-════════════════════════════════════════════════ */
-function toggleEditMode() {
-  editMode = !editMode;
-  const btn = document.getElementById('editToggle');
-  btn.textContent = editMode ? '✅ 완료' : '✏️ 편집';
-  btn.classList.toggle('active', editMode);
-  renderFolder(currentFolder);
-}
+function openSfView(sfId) { currentSfId=sfId; renderFolder(currentFolder); }
+function closeSfView()    { currentSfId=null;  renderFolder(currentFolder); }
+function toggleEditMode() { editMode=!editMode; renderFolder(currentFolder); }
 
-/* ════════════════════════════════════════════════
-   Drag & Drop
-════════════════════════════════════════════════ */
-let dragSrcId = null;
+/* ════ Drag & Drop ════ */
+let dragId = null;
 function initDrag() {
-  document.querySelectorAll('.card.edit-active').forEach(card => {
-    card.addEventListener('dragstart', onDragStart);
-    card.addEventListener('dragend',   onDragEnd);
-    card.addEventListener('dragover',  onDragOver);
-    card.addEventListener('dragleave', onDragLeave);
-    card.addEventListener('drop',      onDrop);
+  document.querySelectorAll('.card.edit-active').forEach(c => {
+    c.addEventListener('dragstart', e => { dragId=parseInt(c.dataset.id); c.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
+    c.addEventListener('dragend',   () => { c.classList.remove('dragging'); document.querySelectorAll('.card').forEach(x=>x.classList.remove('drag-over')); });
+    c.addEventListener('dragover',  e => { e.preventDefault(); if(parseInt(c.dataset.id)!==dragId) c.classList.add('drag-over'); });
+    c.addEventListener('dragleave', () => c.classList.remove('drag-over'));
+    c.addEventListener('drop',      e => {
+      e.preventDefault(); e.stopPropagation(); c.classList.remove('drag-over');
+      const tid = parseInt(c.dataset.id); if(tid===dragId) return;
+      const sites=curSites().slice();
+      const si=sites.findIndex(s=>s.id===dragId), ti=sites.findIndex(s=>s.id===tid);
+      if(si===-1||ti===-1) return;
+      const [mv]=sites.splice(si,1); sites.splice(ti,0,mv);
+      setCurSites(sites); save(); renderSites();
+    });
   });
 }
-function onDragStart(e) {
-  dragSrcId = parseInt(this.dataset.id);
-  this.classList.add('dragging');
-  e.dataTransfer.effectAllowed = 'move';
-}
-function onDragEnd() {
-  this.classList.remove('dragging');
-  document.querySelectorAll('.card').forEach(c => c.classList.remove('drag-over'));
-}
-function onDragOver(e) {
-  e.preventDefault(); e.dataTransfer.dropEffect = 'move';
-  if (parseInt(this.dataset.id) !== dragSrcId) this.classList.add('drag-over');
-}
-function onDragLeave() { this.classList.remove('drag-over'); }
-function onDrop(e) {
-  e.preventDefault(); e.stopPropagation();
-  this.classList.remove('drag-over');
-  const targetId = parseInt(this.dataset.id);
-  if (targetId === dragSrcId) return;
-  const sites  = data[currentFolder];
-  const srcIdx = sites.findIndex(s => s.id === dragSrcId);
-  const tgtIdx = sites.findIndex(s => s.id === targetId);
-  if (srcIdx === -1 || tgtIdx === -1) return;
-  const [moved] = sites.splice(srcIdx, 1);
-  sites.splice(tgtIdx, 0, moved);
-  save(); renderFolder(currentFolder);
-}
 
-/* ════════════════════════════════════════════════
-   카드 액션 (삭제)
-════════════════════════════════════════════════ */
+/* ════ Site Actions ════ */
 function deleteSite(e, id) {
   e.preventDefault(); e.stopPropagation();
-  if (!confirm('이 사이트를 삭제할까요?')) return;
-  data[currentFolder] = (data[currentFolder] || []).filter(s => s.id !== id);
-  save(); renderFolder(currentFolder);
-  showToast('🗑️ 삭제되었습니다');
+  if(!confirm('이 사이트를 삭제할까요?')) return;
+  setCurSites(curSites().filter(s=>s.id!==id));
+  save(); renderFolder(currentFolder); showToast('🗑️ 삭제됐어요');
 }
 
-/* ════════════════════════════════════════════════
-   폴더 이동 모달
-════════════════════════════════════════════════ */
-let movingId = null;
-
+/* ════ Move Modal ════ */
 function openMoveModal(e, id) {
   e.preventDefault(); e.stopPropagation();
   movingId = id;
-
-  // 현재 폴더 이름 표시
-  const cf = FOLDERS.find(x => x.id === currentFolder);
-  document.getElementById('moveCurrentFolderName').textContent = `${cf.emoji} ${cf.name}`;
-
-  // 폴더 선택 버튼 렌더링 (현재 폴더는 비활성)
-  document.getElementById('folderPickGrid').innerHTML = FOLDERS.map(f => `
-    <button class="folder-pick-btn${f.id === currentFolder ? ' current' : ''}"
-            style="border-color:${f.id === currentFolder ? 'rgba(255,255,255,0.06)' : f.color+'44'}"
-            onclick="moveSiteTo('${f.id}')">
-      <span class="fp-emoji">${f.emoji}</span>
-      <span class="fp-name">${f.name}</span>
-      ${f.id === currentFolder ? '<span style="font-size:10px;color:var(--muted)">현재 폴더</span>' : ''}
-    </button>`
-  ).join('');
-
-  document.getElementById('moveBackdrop').classList.add('open');
-}
-
-function closeMoveModal() {
-  document.getElementById('moveBackdrop').classList.remove('open');
-  movingId = null;
-}
-
-function moveSiteTo(targetFolderId) {
-  if (!movingId || targetFolderId === currentFolder) return;
-
-  // 현재 폴더에서 꺼내기
-  const fromSites = data[currentFolder] || [];
-  const siteIdx   = fromSites.findIndex(s => s.id === movingId);
-  if (siteIdx === -1) return;
-
-  const [site] = fromSites.splice(siteIdx, 1);
-  data[currentFolder] = fromSites;
-
-  // 대상 폴더에 넣기
-  if (!data[targetFolderId]) data[targetFolderId] = [];
-  data[targetFolderId].push(site);
-
-  save();
-  renderFolder(currentFolder);
-  closeMoveModal();
-
-  const tf = FOLDERS.find(x => x.id === targetFolderId);
-  showToast(`📂 "${site.name}"을(를) ${tf.emoji} ${tf.name}(으)로 이동했어요`);
-}
-
-/* ════════════════════════════════════════════════
-   모달
-════════════════════════════════════════════════ */
-function buildIconGrid() {
-  document.getElementById('iconGrid').innerHTML = ICONS.map(ic =>
-    `<div class="icon-opt${ic === selectedIcon ? ' selected' : ''}" onclick="selectIcon('${ic}',this)">${ic}</div>`
-  ).join('');
-}
-function buildColorRow() {
-  document.getElementById('colorRow').innerHTML = COLORS.map(c =>
-    `<div class="color-opt${c === selectedColor ? ' selected' : ''}" style="background:${c}" onclick="selectColor('${c}',this)"></div>`
-  ).join('');
-}
-function selectIcon(ic, el) {
-  selectedIcon = ic;
-  document.querySelectorAll('.icon-opt').forEach(e => e.classList.remove('selected'));
-  el.classList.add('selected');
-}
-function selectColor(c, el) {
-  selectedColor = c;
-  document.querySelectorAll('.color-opt').forEach(e => e.classList.remove('selected'));
-  el.classList.add('selected');
-}
-function openModal() {
-  editingId = null;
-  selectedIcon = ICONS[0]; selectedColor = COLORS[0];
-  document.getElementById('modalTitle').textContent = '🌐 사이트 추가';
-  document.getElementById('btnSave').textContent    = '저장하기';
-  document.getElementById('inputName').value = '';
-  document.getElementById('inputUrl').value  = '';
-  buildIconGrid(); buildColorRow();
-  document.getElementById('modalBackdrop').classList.add('open');
-  setTimeout(() => document.getElementById('inputName').focus(), 200);
-}
-function openEditModal(e, id) {
-  e.preventDefault(); e.stopPropagation();
-  const s = (data[currentFolder] || []).find(x => x.id === id);
-  if (!s) return;
-  editingId = id; selectedIcon = s.icon; selectedColor = s.color;
-  document.getElementById('modalTitle').textContent = '✏️ 사이트 편집';
-  document.getElementById('btnSave').textContent    = '수정하기';
-  document.getElementById('inputName').value = s.name;
-  document.getElementById('inputUrl').value  = s.url;
-  buildIconGrid(); buildColorRow();
-  document.getElementById('modalBackdrop').classList.add('open');
-  setTimeout(() => document.getElementById('inputName').focus(), 200);
-}
-function closeModal() {
-  document.getElementById('modalBackdrop').classList.remove('open');
-  editingId = null;
-}
-function saveSite() {
-  const name = document.getElementById('inputName').value.trim();
-  let   url  = document.getElementById('inputUrl').value.trim();
-  if (!name) { showToast('이름을 입력해주세요!'); return; }
-  if (!url)  { showToast('URL을 입력해주세요!');  return; }
-  if (!url.startsWith('http')) url = 'https://' + url;
-
-  if (!data[currentFolder]) data[currentFolder] = [];
-
-  if (editingId !== null) {
-    data[currentFolder] = data[currentFolder].map(s =>
-      s.id === editingId ? { ...s, name, url, icon: selectedIcon, color: selectedColor } : s
-    );
-    showToast('✅ 수정되었습니다!');
-  } else {
-    data[currentFolder].push({ id: Date.now(), name, url, icon: selectedIcon, color: selectedColor });
-    showToast('✨ 사이트가 추가되었습니다!');
+  const site = curSites().find(s=>s.id===id);
+  document.getElementById('moveSub').textContent = `"${site?.name}"을(를) 이동할 위치를 선택하세요`;
+  const folders = getFolders();
+  const sfs = (data[currentFolder]?.__sf)||[];
+  let html='';
+  if(sfs.length>0){
+    html+=`<div class="move-section-lbl">📁 분류 폴더</div><div class="move-grid">`;
+    html+=sfs.map(sf=>`<button class="move-btn${sf.id===currentSfId?' cur':''}" onclick="moveTo('sf','${sf.id}')">
+      <span class="me">${sf.emoji}</span><span class="mn">${sf.name}</span>${sf.id===currentSfId?'<span style="font-size:10px;color:var(--muted)">현재</span>':''}
+    </button>`).join('');
+    if(currentSfId) html+=`<button class="move-btn" onclick="moveTo('sf','__root__')"><span class="me">📋</span><span class="mn">미분류</span></button>`;
+    html+=`</div>`;
   }
-  save(); renderFolder(currentFolder); closeModal();
+  html+=`<div class="move-section-lbl">🗂️ 다른 폴더</div><div class="move-grid">`;
+  html+=folders.map(f=>`<button class="move-btn${f.id===currentFolder&&!currentSfId?' cur':''}" onclick="moveTo('folder','${f.id}')">
+    <span class="me">${f.emoji}</span><span class="mn">${f.name}</span>${f.id===currentFolder&&!currentSfId?'<span style="font-size:10px;color:var(--muted)">현재</span>':''}
+  </button>`).join('');
+  html+=`</div>`;
+  document.getElementById('moveContent').innerHTML=html;
+  document.getElementById('moveBD').classList.add('open');
 }
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+function closeMoveModal(){document.getElementById('moveBD').classList.remove('open');movingId=null;}
+function moveTo(type,targetId){
+  if(!movingId) return;
+  const sites=curSites().slice(), idx=sites.findIndex(s=>s.id===movingId);
+  if(idx===-1) return;
+  const [site]=sites.splice(idx,1);
+  setCurSites(sites);
+  if(type==='sf'){
+    ensureFolder(currentFolder);
+    if(targetId==='__root__') data[currentFolder].__root.push(site);
+    else { if(!data[currentFolder][targetId]) data[currentFolder][targetId]=[]; data[currentFolder][targetId].push(site); }
+    showToast('📂 이동했어요');
+  } else {
+    ensureFolder(targetId);
+    data[targetId].__root.push(site);
+    const tf=getFolders().find(f=>f.id===targetId);
+    showToast(`📂 "${site.name}"을(를) ${tf.emoji} ${tf.name}(으)로 이동했어요`);
+  }
+  save(); renderFolder(currentFolder); closeMoveModal();
 }
 
-/* ════════════════════════════════════════════════
-   키보드 & 이벤트
-════════════════════════════════════════════════ */
-document.getElementById('modalBackdrop').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
+/* ════ Icon/Color Pickers ════ */
+function pickIcon(idx, type) {
+  const ic = ICONS[idx];
+  if(type==='f') fSel.icon=ic;
+  else if(type==='sf') sfSel.icon=ic;
+  else sSel.icon=ic;
+  const gid = type==='f'?'fIconGrid':type==='sf'?'sfIconGrid':'sIconGrid';
+  document.getElementById(gid).querySelectorAll('.icon-opt').forEach((el,i)=>el.classList.toggle('selected',i===idx));
+}
+function pickColor(idx, type) {
+  const c = COLORS[idx];
+  if(type==='f') fSel.color=c;
+  else if(type==='sf') sfSel.color=c;
+  else sSel.color=c;
+  const rid = type==='f'?'fColorRow':type==='sf'?'sfColorRow':'sColorRow';
+  document.getElementById(rid).querySelectorAll('.color-opt').forEach((el,i)=>el.classList.toggle('selected',i===idx));
+}
+function buildIconGrid(gid, selIc, type) {
+  document.getElementById(gid).innerHTML = ICONS.map((ic,i)=>
+    `<div class="icon-opt${ic===selIc?' selected':''}" onclick="pickIcon(${i},'${type}')">${ic}</div>`
+  ).join('');
+}
+function buildColorRow(rid, selC, type) {
+  document.getElementById(rid).innerHTML = COLORS.map((c,i)=>
+    `<div class="color-opt${c===selC?' selected':''}" style="background:${c}" onclick="pickColor(${i},'${type}')"></div>`
+  ).join('');
+}
+
+/* ════ Folder Modal ════ */
+function openFolderAddModal() {
+  editingFid=null; fSel={icon:'📁',color:COLORS[0]};
+  document.getElementById('folderModalTitle').textContent='📁 새 폴더 만들기';
+  document.getElementById('fBtnSave').textContent='만들기';
+  document.getElementById('fName').value='';
+  document.getElementById('fLockChk').checked=false;
+  buildIconGrid('fIconGrid',fSel.icon,'f'); buildColorRow('fColorRow',fSel.color,'f');
+  document.getElementById('folderModalBD').classList.add('open');
+  setTimeout(()=>document.getElementById('fName').focus(),200);
+}
+function openFolderEditModal(e, fid) {
+  e.stopPropagation();
+  const f=getFolders().find(x=>x.id===fid); if(!f) return;
+  editingFid=fid; fSel={icon:f.emoji,color:f.color};
+  document.getElementById('folderModalTitle').textContent='✏️ 폴더 편집';
+  document.getElementById('fBtnSave').textContent='수정하기';
+  document.getElementById('fName').value=f.name;
+  document.getElementById('fLockChk').checked=!!f.locked;
+  buildIconGrid('fIconGrid',fSel.icon,'f'); buildColorRow('fColorRow',fSel.color,'f');
+  document.getElementById('folderModalBD').classList.add('open');
+  setTimeout(()=>document.getElementById('fName').focus(),200);
+}
+function closeFolderModal(){document.getElementById('folderModalBD').classList.remove('open');editingFid=null;}
+function saveFolder(){
+  const name=document.getElementById('fName').value.trim();
+  const locked=document.getElementById('fLockChk').checked;
+  if(!name){showToast('폴더 이름을 입력해주세요!');return;}
+  if(!data._config) data._config={folders:[],password:DEFAULT_PW};
+  if(editingFid){
+    data._config.folders=data._config.folders.map(f=>f.id===editingFid?{...f,name,emoji:fSel.icon,color:fSel.color,locked}:f);
+    if(locked) unlocked.delete(editingFid);
+    showToast('✅ 폴더가 수정됐어요!');
+  } else {
+    const nid='folder_'+Date.now();
+    data._config.folders.push({id:nid,name,emoji:fSel.icon,color:fSel.color,locked});
+    data[nid]={__sf:[],__root:[]};
+    showToast('📁 새 폴더가 추가됐어요!');
+  }
+  save(); renderHome(); closeFolderModal();
+}
+function deleteFolder(e, fid){
+  e.stopPropagation();
+  const f=getFolders().find(x=>x.id===fid);
+  const cnt=totalCount(fid);
+  const msg=cnt>0?`"${f?.name}" 폴더에 ${cnt}개의 사이트가 있어요. 모두 삭제할까요?`:`"${f?.name}" 폴더를 삭제할까요?`;
+  if(!confirm(msg)) return;
+  data._config.folders=data._config.folders.filter(x=>x.id!==fid);
+  delete data[fid];
+  save(); renderHome(); showToast('🗑️ 폴더가 삭제됐어요');
+}
+
+/* ════ Sub-folder Modal ════ */
+function openSfAddModal(){
+  editingSfId=null; sfSel={icon:'📂',color:COLORS[0]};
+  document.getElementById('sfModalTitle').textContent='📂 분류 폴더 추가';
+  document.getElementById('sfBtnSave').textContent='추가하기';
+  document.getElementById('sfName').value='';
+  buildIconGrid('sfIconGrid',sfSel.icon,'sf'); buildColorRow('sfColorRow',sfSel.color,'sf');
+  document.getElementById('sfModalBD').classList.add('open');
+  setTimeout(()=>document.getElementById('sfName').focus(),200);
+}
+function openSfEditModal(e, sfId){
+  e.stopPropagation();
+  const sf=(data[currentFolder]?.__sf||[]).find(s=>s.id===sfId); if(!sf) return;
+  editingSfId=sfId; sfSel={icon:sf.emoji,color:sf.color};
+  document.getElementById('sfModalTitle').textContent='✏️ 분류 폴더 편집';
+  document.getElementById('sfBtnSave').textContent='수정하기';
+  document.getElementById('sfName').value=sf.name;
+  buildIconGrid('sfIconGrid',sfSel.icon,'sf'); buildColorRow('sfColorRow',sfSel.color,'sf');
+  document.getElementById('sfModalBD').classList.add('open');
+  setTimeout(()=>document.getElementById('sfName').focus(),200);
+}
+function closeSfModal(){document.getElementById('sfModalBD').classList.remove('open');editingSfId=null;}
+function saveSf(){
+  const name=document.getElementById('sfName').value.trim();
+  if(!name){showToast('이름을 입력해주세요!');return;}
+  ensureFolder(currentFolder);
+  if(editingSfId){
+    data[currentFolder].__sf=data[currentFolder].__sf.map(sf=>sf.id===editingSfId?{...sf,name,emoji:sfSel.icon,color:sfSel.color}:sf);
+    showToast('✅ 수정됐어요!');
+  } else {
+    const nid='sf_'+Date.now();
+    data[currentFolder].__sf.push({id:nid,name,emoji:sfSel.icon,color:sfSel.color});
+    data[currentFolder][nid]=[];
+    showToast('📂 분류 폴더가 추가됐어요!');
+  }
+  save(); renderFolder(currentFolder); closeSfModal();
+}
+function deleteSf(e, sfId){
+  e.stopPropagation();
+  const sf=(data[currentFolder]?.__sf||[]).find(s=>s.id===sfId);
+  const cnt=(data[currentFolder]?.[sfId]||[]).length;
+  const msg=cnt>0?`"${sf?.name}" 삭제 시 ${cnt}개의 사이트가 미분류로 이동돼요. 삭제할까요?`:`"${sf?.name}"을(를) 삭제할까요?`;
+  if(!confirm(msg)) return;
+  const sfSites=data[currentFolder][sfId]||[];
+  data[currentFolder].__root=[...(data[currentFolder].__root||[]),...sfSites];
+  delete data[currentFolder][sfId];
+  data[currentFolder].__sf=data[currentFolder].__sf.filter(s=>s.id!==sfId);
+  if(currentSfId===sfId){currentSfId=null;}
+  save(); renderFolder(currentFolder); showToast('🗑️ 삭제됐어요');
+}
+
+/* ════ Site Modal ════ */
+function openSiteModal(){
+  editingSiteId=null; sSel={icon:ICONS[0],color:COLORS[0]};
+  document.getElementById('siteModalTitle').textContent='🌐 사이트 추가';
+  document.getElementById('sBtnSave').textContent='저장하기';
+  document.getElementById('sName').value=''; document.getElementById('sUrl').value='';
+  buildIconGrid('sIconGrid',sSel.icon,'s'); buildColorRow('sColorRow',sSel.color,'s');
+  document.getElementById('siteModalBD').classList.add('open');
+  setTimeout(()=>document.getElementById('sName').focus(),200);
+}
+function openSiteEditModal(e, id){
+  e.preventDefault(); e.stopPropagation();
+  const s=curSites().find(x=>x.id===id); if(!s) return;
+  editingSiteId=id; sSel={icon:s.icon,color:s.color};
+  document.getElementById('siteModalTitle').textContent='✏️ 사이트 편집';
+  document.getElementById('sBtnSave').textContent='수정하기';
+  document.getElementById('sName').value=s.name; document.getElementById('sUrl').value=s.url;
+  buildIconGrid('sIconGrid',sSel.icon,'s'); buildColorRow('sColorRow',sSel.color,'s');
+  document.getElementById('siteModalBD').classList.add('open');
+  setTimeout(()=>document.getElementById('sName').focus(),200);
+}
+function closeSiteModal(){document.getElementById('siteModalBD').classList.remove('open');editingSiteId=null;}
+function saveSite(){
+  const name=document.getElementById('sName').value.trim();
+  let url=document.getElementById('sUrl').value.trim();
+  if(!name){showToast('이름을 입력해주세요!');return;}
+  if(!url){showToast('URL을 입력해주세요!');return;}
+  if(!url.startsWith('http')) url='https://'+url;
+  const sites=curSites().slice();
+  if(editingSiteId!==null){
+    const idx=sites.findIndex(s=>s.id===editingSiteId);
+    if(idx!==-1) sites[idx]={...sites[idx],name,url,icon:sSel.icon,color:sSel.color};
+    showToast('✅ 수정됐어요!');
+  } else {
+    sites.push({id:Date.now(),name,url,icon:sSel.icon,color:sSel.color});
+    showToast('✨ 사이트가 추가됐어요!');
+  }
+  setCurSites(sites); save(); renderFolder(currentFolder); closeSiteModal();
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ════ Events ════ */
+document.getElementById('pwInput').addEventListener('keydown', e=>{if(e.key==='Enter') confirmPw();});
+['pwBackdrop','folderModalBD','sfModalBD','siteModalBD','moveBD'].forEach(id=>{
+  document.getElementById(id).addEventListener('click', function(e){
+    if(e.target===this){
+      if(id==='pwBackdrop') closePwModal();
+      else if(id==='folderModalBD') closeFolderModal();
+      else if(id==='sfModalBD') closeSfModal();
+      else if(id==='siteModalBD') closeSiteModal();
+      else closeMoveModal();
+    }
+  });
 });
-document.getElementById('moveBackdrop').addEventListener('click', function(e) {
-  if (e.target === this) closeMoveModal();
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeModal(); closeMoveModal(); }
-  if (e.key === 'Enter' && document.getElementById('modalBackdrop').classList.contains('open')) saveSite();
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){closePwModal();closeFolderModal();closeSfModal();closeSiteModal();closeMoveModal();}
+  if(e.key==='Enter'){
+    if(document.getElementById('siteModalBD').classList.contains('open')) saveSite();
+    else if(document.getElementById('sfModalBD').classList.contains('open')) saveSf();
+    else if(document.getElementById('folderModalBD').classList.contains('open')) saveFolder();
+  }
 });
 
-/* 시작 */
 load();
 </script>
 </body>
