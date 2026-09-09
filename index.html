@@ -102,6 +102,9 @@ h1{font-family:'Gmarket Sans',sans-serif;font-size:clamp(28px,4vw,46px);font-wei
 .sf-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;background:var(--sfc,#6c63ff);border-radius:16px 16px 0 0;opacity:0.85}
 .sf-card:not(.edit-sf):hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.15);transform:translateY(-3px)}
 .sf-card.edit-sf:hover{border-color:rgba(108,99,255,0.4)}
+.sf-card.edit-sf{cursor:grab}
+.sf-card.dragging{opacity:0.35;transform:scale(0.96)!important;cursor:grabbing}
+.sf-card.drag-over{border-color:var(--accent3)!important;box-shadow:0 0 0 2px var(--accent3);transform:scale(1.05)!important}
 .sf-emoji{font-size:26px}
 .sf-name{font-size:14px;font-weight:500;color:#fff;font-family:'Gmarket Sans',sans-serif}
 .sf-count{font-size:11px;color:var(--muted)}
@@ -672,7 +675,8 @@ function renderSfGrid(fid) {
       <button class="sf-btn sf-btn-del"  onclick="deleteSf(event,'${sf.id}')"        title="삭제">✕</button>
     </div>` : '';
     const click = editMode ? '' : `onclick="openSfView('${sf.id}')"`;
-    return `<div class="sf-card${editMode?' edit-sf':''}" style="--sfc:${sf.color}" ${click}>
+    const draggable = editMode ? 'draggable="true"' : '';
+    return `<div class="sf-card${editMode?' edit-sf':''}" style="--sfc:${sf.color}" data-sfid="${sf.id}" ${click} ${draggable}>
       ${btns}
       <div class="sf-emoji">${sf.emoji}</div>
       <div class="sf-name">${sf.name}</div>
@@ -684,6 +688,7 @@ function renderSfGrid(fid) {
     <div style="font-size:13px;color:var(--accent3);opacity:0.65">분류 추가</div>
   </div>`;
   g.innerHTML = html;
+  if (editMode) initSfDrag();
 }
 
 function renderSites() {
@@ -700,22 +705,65 @@ function renderSites() {
       <button class="card-btn card-btn-move"   onclick="openMoveModal(event,${s.id})"     title="이동">📂</button>
       <button class="card-btn card-btn-delete" onclick="deleteSite(event,${s.id})"        title="삭제">✕</button>
     </div><div class="drag-handle">⠿⠿</div>` : '';
-    const href   = editMode ? 'javascript:void(0)' : s.url;
-    const target = editMode ? '' : 'target="_blank" rel="noopener"';
-    return `<a class="card${editMode?' edit-active':''}" href="${href}" ${target} data-id="${s.id}" style="--c:${s.color};animation-delay:${i*0.05}s" ${editMode?'draggable="true"':''}>
-      ${btns}
-      <div class="card-icon">${s.icon}</div>
-      <div class="card-name">${s.name}</div>
-      <div class="card-url">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-          <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-        </svg>${short}
-      </div>
-      ${editMode?'':`<span class="card-arrow">→</span>`}
-    </a>`;
+    const linkIcon = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+      <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+    </svg>`;
+    if (editMode) {
+      // 편집 모드: <a> 대신 <div> 사용 (브라우저가 링크 드래그 가로채는 문제 방지)
+      return `<div class="card edit-active" draggable="true" data-id="${s.id}" style="--c:${s.color};animation-delay:${i*0.05}s">
+        ${btns}
+        <div class="card-icon">${s.icon}</div>
+        <div class="card-name">${s.name}</div>
+        <div class="card-url">${linkIcon}${short}</div>
+      </div>`;
+    } else {
+      return `<a class="card" href="${s.url}" target="_blank" rel="noopener" data-id="${s.id}" style="--c:${s.color};animation-delay:${i*0.05}s">
+        <div class="card-icon">${s.icon}</div>
+        <div class="card-name">${s.name}</div>
+        <div class="card-url">${linkIcon}${short}</div>
+        <span class="card-arrow">→</span>
+      </a>`;
+    }
   }).join('');
   if (editMode) initDrag();
+}
+
+/* ════ Sub-folder Drag ════ */
+let dragSfId = null;
+function initSfDrag() {
+  document.querySelectorAll('.sf-card.edit-sf').forEach(c => {
+    c.setAttribute('draggable', 'true');
+    c.addEventListener('dragstart', e => {
+      dragSfId = c.dataset.sfid;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', dragSfId);
+      setTimeout(() => c.classList.add('dragging'), 0);
+    });
+    c.addEventListener('dragend', () => {
+      c.classList.remove('dragging');
+      document.querySelectorAll('.sf-card').forEach(x => x.classList.remove('drag-over'));
+    });
+    c.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (c.dataset.sfid !== dragSfId) c.classList.add('drag-over');
+    });
+    c.addEventListener('dragleave', () => c.classList.remove('drag-over'));
+    c.addEventListener('drop', e => {
+      e.preventDefault(); e.stopPropagation();
+      c.classList.remove('drag-over');
+      const targetId = c.dataset.sfid;
+      if (targetId === dragSfId) return;
+      const sfs = data[currentFolder].__sf;
+      const si = sfs.findIndex(s => s.id === dragSfId);
+      const ti = sfs.findIndex(s => s.id === targetId);
+      if (si === -1 || ti === -1) return;
+      const [mv] = sfs.splice(si, 1);
+      sfs.splice(ti, 0, mv);
+      save(); renderFolder(currentFolder);
+    });
+  });
 }
 
 function openSfView(sfId) { currentSfId=sfId; renderFolder(currentFolder); }
